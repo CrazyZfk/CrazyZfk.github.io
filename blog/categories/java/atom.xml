@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Java | My Octopress Blog]]></title>
+  <link href="http://crazyzfk.github.io/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://crazyzfk.github.io/"/>
+  <updated>2018-03-19T22:15:34+08:00</updated>
+  <id>http://crazyzfk.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Reflection-in-java]]></title>
+    <link href="http://crazyzfk.github.io/blog/2018/03/19/reflection-in-java/"/>
+    <updated>2018-03-19T20:40:25+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2018/03/19/reflection-in-java</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>java的反射机制是java的一个重要的特性，使用反射机制可以使java具有更好的灵活性。有时候我们需要动态的获取类的信息而这些信息有可能是在编译时是获取不到的，这个使用使用反射机制就能很好的解决问题。</p>
+
+<h2>RTTI</h2>
+
+<p>RTTI的含义：在运行时识别一个对象的类型。</p>
+
+<h3>class对象</h3>
+
+<p>类时程序的一部分，每个类都有一个Class对象，每当编写并编译一个新类就会产生一个Class对象。<br/>
+Class对象仅在需要的时候被加载，Class.forName()是Class的一个静态方法，该方法参数为对象的名称，返回的为Class对象的引用。</p>
+
+<pre><code class="java">try {
+            Class c=Class.forName("X");
+        } catch (ClassNotFoundException e) {
+            // 当找不到对应的类时就会报错
+            e.printStackTrace();
+        }
+</code></pre>
+
+<p>无论何时，只要你想在运行时使用类型信息，就必须首先获得恰当的Class对象的引用，Class.forName()就是实现此功能的便捷途径。使用Class.forName()你不必持有一个该类型的对象，只需要知道类型的名称就可以了，当然如果你持有该类型的对象，你也可以调用对象的getClass方法：</p>
+
+<pre><code class="java">x.getClass()
+</code></pre>
+
+<p>x是对象。<br/>
+通过Class对象你可以发现你想要了解的所有信息：</p>
+
+<ul>
+<li>类的简单名称和权限定名称</li>
+<li>类的直接基类</li>
+<li>类实现的接口</li>
+<li>···</li>
+</ul>
+
+
+<p><strong>类字面常量：</strong></p>
+
+<p>java提供了另一种方法来生成对Class对象的引用，就是类字面常量</p>
+
+<pre><code class="java">X.class
+</code></pre>
+
+<p>X是类而不是对象。<br/>
+与使用Class.forName()相比，使用类字面常量有以下的优点：</p>
+
+<ol>
+<li>更加简单和安全，因为在编译时就受到检查。</li>
+<li>forName()是方法调用，所以类字面常量更加高效。</li>
+<li>使用类字面常量时不会自动初始化该Class对象。</li>
+</ol>
+
+
+<p>类字面常量不仅可以应用于普通的类，也可以应用于接口、数组以及基本数据类型。另外对于基本数据类型的包装类，还有一个标字段TYPE。TYPE字段是一个引用，指向对应的基本数据类型的额Class对象，如下所示：</p>
+
+<table>
+<thead>
+<tr>
+<th>boolean.class  </th>
+<th>Boolean.TYPE       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>char.class     </td>
+<td>Character.TYPE </td>
+</tr>
+<tr>
+<td>byte.class     </td>
+<td>Byte.TYPE      </td>
+</tr>
+<tr>
+<td>short.class        </td>
+<td>Short.TYPE     </td>
+</tr>
+<tr>
+<td>int.class      </td>
+<td>Integer.TYPE       </td>
+</tr>
+<tr>
+<td>long.class     </td>
+<td>Long.TYPE      </td>
+</tr>
+<tr>
+<td>float.class        </td>
+<td>Float.TYPE     </td>
+</tr>
+<tr>
+<td>double.class       </td>
+<td>Double.TYPE        </td>
+</tr>
+<tr>
+<td>void.class     </td>
+<td>Void.TYPE      </td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>泛化的Class引用：</strong><br/>
+Class引用总是指向某个Class对象，它可以制造类的实例，并包含可作用于这些实例的所有方法代码。Class引用表示的就是它所指向的对象的确切类型，而该对象就是Class类的一个对象（Class是所有类的类）。<br/>
+java5 以后泛型的引入使得Class所表示的类型更加明确</p>
+
+<pre><code class="java">    Class intClass=int.class;//编译器会有警告  
+    Class&lt;Integer&gt; genericIntClass=int.class;  
+    intClass=double.class;//可以编译通过  
+    genericIntClass=double.class;//编译时报错
+</code></pre>
+
+<p><em>通过泛型可以让编译器强制执行额外的类型检查。</em></p>
+
+<h2>反射</h2>
+
+<p>Class类和java.lang.reflect类库一起对泛型的概念进行了支持，该类库包含了Field，Method以及Constructor（每个类都实现了Member接口）。这些类型的对象是由JVM在运行时创建的，用以表示未知类里对应的成员。<br/>
+RTTI和反射之间之间真正的区别在于：<br/>
+对于RTTI来说，编译器在编译时打开和检查class文件而对于反射来说，class文件在编译时是不可获取的，所以是在运行时打开和检查class文件。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[For-vs-foreach-in-java]]></title>
+    <link href="http://crazyzfk.github.io/blog/2018/03/19/for-vs-foreach-in-java/"/>
+    <updated>2018-03-19T20:30:23+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2018/03/19/for-vs-foreach-in-java</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>一直觉得在java中使用foreach会带来一定的效率的提升，今天调研才发现并没有，看来事情还是要多调研，不能直视凭直觉来断定事情。</p>
+
+<h2>举例</h2>
+
+<p>如下两个例子：</p>
+
+<pre><code class="java">for(Object o: objectArrayList){
+    o.DoSomthing();
+}
+</code></pre>
+
+<p>and</p>
+
+<pre><code class="java">for(int i=0; i&lt;objectArrayList.size(); i++){
+    objectArrayList.get(i).DoSomthing();
+}
+</code></pre>
+
+<p>根据我查到的资料显示，其实他们两个编译后的代码时没有区别的，foreach只是比for看起来更加简洁，唯一说可能有性能差异的地方也就是for会每次计算列表的长度。<br/>
+不信你自己看<a href="http://stackoverflow.com/questions/256859/is-there-a-performance-difference-between-a-for-loop-and-a-for-each-loop">这里</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Serialization in Java]]></title>
+    <link href="http://crazyzfk.github.io/blog/2017/04/16/serialization-in-java/"/>
+    <updated>2017-04-16T10:45:10+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2017/04/16/serialization-in-java</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>java序列化是java作为网络编程语言的一个重要特性，序列化使得java对象可以被转为字节码，用于对象的存储和传输。
+一个对象能被序列化就要实现java.io.Serializable：</p>
+
+<pre><code class="java"> * @author  unascribed
+ * @see java.io.ObjectOutputStream
+ * @see java.io.ObjectInputStream
+ * @see java.io.ObjectOutput
+ * @see java.io.ObjectInput
+ * @see java.io.Externalizable
+ * @since   JDK1.1
+ */
+public interface Serializable {
+}
+</code></pre>
+
+<p>该接口是一个空接口，只是用于标记如果没有实现该接口就不能序列化，其中writeObject方法会检测传入的类是否实现了java.io.Serializable接口，如果类没有实现java.io.Serializable接口序列号时会导致报错。</p>
+
+<h2>实现java.io.Serializable</h2>
+
+<p>假设有这样一个类没有实现java.io.Serializable：</p>
+
+<pre><code class="java">class Student {
+    private String name;
+    private int age;
+    private int grade;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public int getGrade() {
+        return grade;
+    }
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+}
+</code></pre>
+
+<p>对该类调用writeObject：</p>
+
+<pre><code class="java">public class SerializationTest {
+    public static void main(String[] args) {
+        try {
+            ByteArrayOutputStream baos=new ByteArrayOutputStream();
+            ObjectOutputStream oos=new ObjectOutputStream(baos);
+            Student student=new Student();
+            student.setName("name");
+            student.setAge(10);
+            student.setGrade(6);
+            oos.writeObject(student);
+            ObjectInputStream ois=new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+            Student student1=(Student) ois.readObject();
+            System.out.println(student1.getName()+","+student1.getAge()+","+student1.getGrade());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+    }
+
+}
+</code></pre>
+
+<p>执行结果如下：</p>
+
+<pre><code class="java">java.io.NotSerializableException: serialization.Student
+    at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1183)
+    at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:347)
+    at serialization.SerializationTest.main(SerializationTest.java:20)
+</code></pre>
+
+<p>writeObject方法中会验证传入的参数是否实现了java.io.Serializable：</p>
+
+<pre><code class="java">            if (obj instanceof String) {
+                writeString((String) obj, unshared);
+            } else if (cl.isArray()) {
+                writeArray(obj, desc, unshared);
+            } else if (obj instanceof Enum) {
+                writeEnum((Enum) obj, desc, unshared);
+            } else if (obj instanceof Serializable) {
+                writeOrdinaryObject(obj, desc, unshared);
+            } else {
+                if (extendedDebugInfo) {
+                    throw new NotSerializableException(
+                        cl.getName() + "\n" + debugInfoStack.toString());
+                } else {
+                    throw new NotSerializableException(cl.getName());
+                }
+            }
+</code></pre>
+
+<h2>serialVersionUID</h2>
+
+<p>序列化对象在被反序列化为类的时候会检验serialVersionUID，如果没有手动指定该值会在序列化时根据类的信息生成一个。序列化时由编译器生成的serialVersionUID会高度依赖类的细节，而且和编译器的实现有很大的关系，也就是说可能存在同样的类在不同的编译器中生成不同的serialVersionUID的情况，或者同样的类仅仅因为改变了类的细节就会导致产生的serialVersionUID不同。</p>
+
+<h3>这种不同会有什么影响？</h3>
+
+<p>我们先把上个例子中的student写入到文件中:</p>
+
+<pre><code class="java">FileOutputStream fos=new FileOutputStream("student.ser");
+ObjectOutputStream oos=new ObjectOutputStream(fos);
+Student student=new Student();
+student.setName("name");
+student.setAge(10);
+student.setGrade(10);
+oos.writeObject(student);
+</code></pre>
+
+<p>在将student修改为：</p>
+
+<pre><code class="java">class Student implements Serializable{
+    private String name;
+    private int age;
+    private int grade;
+    private String school;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public int getGrade() {
+        return grade;
+    }
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+    public String getSchool() {
+        return school;
+    }
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+}
+</code></pre>
+
+<p>在student类中添加了一个字段school，然后在从文件中读取：</p>
+
+<pre><code class="java">FileInputStream fis=new FileInputStream("student.ser");  
+ObjectInputStream ois=new ObjectInputStream(fis);  
+Student student1=(Student) ois.readObject();  
+System.out.println(student1.getName()+","+student1.getAge()+","+student1.getGrade());  
+ois.close();
+fis.close();
+</code></pre>
+
+<p>就会出现如下错误</p>
+
+<pre><code class="java">java.io.InvalidClassException: serialization.Student; local class incompatible: stream classdesc serialVersionUID = -1205959179532190345, local class serialVersionUID = -3693389777067287057
+    at java.io.ObjectStreamClass.initNonProxy(ObjectStreamClass.java:617)
+    at java.io.ObjectInputStream.readNonProxyDesc(ObjectInputStream.java:1622)
+    at java.io.ObjectInputStream.readClassDesc(ObjectInputStream.java:1517)
+    at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1771)
+    at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1350)
+    at java.io.ObjectInputStream.readObject(ObjectInputStream.java:370)
+    at serialization.SerializationTest.main(SerializationTest.java:27)
+</code></pre>
+
+<p>其中错误很清晰的告诉你错误原因是本地的类和读取的类的serialVersionUID不等，这是我们指定新student类的serialVersionUID值为-1205959179532190345</p>
+
+<pre><code class="java">private static final long serialVersionUID = -1205959179532190345L;
+</code></pre>
+
+<p>再次从文件中读取就没有问题。<br/>
+<strong>因此在序列化类时指定类的serialVersionUID值对于类是很有必要的</strong></p>
+
+<h3>serialVersionUID的主要作用</h3>
+
+<p>serialVersionUID主要的目的是记录类的不同版本，使得类被反序列化时序列成正确的版本。指定类的serialVersionUID也可以有效的避免不同JVM实现导致的反序列化失败。</p>
+
+<h2>序列化字段</h2>
+
+<p>有时我们不需要序列化全字段，只需要将类中的指定部分字段序列化。首先我们要明确的是类中的静态变量是不会序列化的，因为静态字段是属于类的，序列化是针对类的实例的。</p>
+
+<h3>使用Externalizable</h3>
+
+<p>java.io.Externalizable是java.io.Serializable的子接口，该接口有两个方法</p>
+
+<pre><code class="java">void writeExternal(ObjectOutput out) throws IOException;
+void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
+</code></pre>
+
+<p>在这两个方法中可以指定那些字段序列化（<a href="http://www.cnblogs.com/chenfei0801/archive/2013/04/06/3002146.html">点击了解更多</a>）。<br/>
+<strong>实现这个接口需要类的存在默认的具有public访问权限的构造函数</strong></p>
+
+<h3>transient</h3>
+
+<p>被transient修饰的字段是不会被序列化的。例如我们将student类修改为：</p>
+
+<pre><code class="java">
+class Student implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1205959179532190345L;
+    private String name;
+    private int age;
+    private int grade;
+    private transient String school;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public int getGrade() {
+        return grade;
+    }
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+    public String getSchool() {
+        return school;
+    }
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+}
+</code></pre>
+
+<p>使用transient修饰school，然后我们序列化后再读取：</p>
+
+<pre><code class="java">public class SerializationTest {
+
+    public static void main(String[] args) {
+        try {
+            //ByteArrayOutputStream baos=new ByteArrayOutputStream();
+            FileOutputStream fos=new FileOutputStream("student.ser");
+            ObjectOutputStream oos=new ObjectOutputStream(fos);
+            Student student=new Student();
+            student.setName("name");
+            student.setAge(10);
+            student.setGrade(6);
+            oos.writeObject(student);
+            FileInputStream fis=new FileInputStream("student.ser");
+            //ObjectInputStream ois=new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+            ObjectInputStream ois=new ObjectInputStream(fis);
+            Student student1=(Student) ois.readObject();
+            System.out.println(student1.getName()+","+student1.getAge()+","+student1.getGrade()+","+student1.getSchool());
+            ois.close();
+            fis.close();
+            oos.close();
+            fos.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+    }
+</code></pre>
+
+<p>执行的结果如下：</p>
+
+<pre><code class="java">name,10,6,null
+</code></pre>
+
+<p>由此可见school并没有被序列化，所以反序列化的值为null。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hashcode in Java]]></title>
+    <link href="http://crazyzfk.github.io/blog/2017/04/08/hashcode-in-java/"/>
+    <updated>2017-04-08T10:45:10+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2017/04/08/hashcode-in-java</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>最近在知乎上看到一个关于hashcode的问答（<a href="https://www.zhihu.com/question/57356225/answer/152881868">问答地址</a>），让我了解了java对于hashcode的处理并没有我想的那么简单。以前一直以为对象hashcode计算的结果是指向对象的引用，如果是这种情况那么至少有下面两种情况不满足：</p>
+
+<ul>
+<li>现在计算机基本都是64位的了，从hashcode的源码可以看到实际hashcode函数返回的是int，int才32位。</li>
+<li>jvm在GC时需要移动对象这种移动会导致对象在堆中的地址改变，如果每次GC都要重新计算对象的hashcode，那么GC的工作就不是那么存粹了出现了JVM操作用户代码的情况。</li>
+</ul>
+
+
+<h3>hashcode到底是什么</h3>
+
+<p>根据<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html#hashCode(">oracle关于hashcode的文档说明</a>)，hashcode的生成有下面三个要求：</p>
+
+<ul>
+<li>在程序的一次执行过程中无论何时调用类的hashcode方法都要返回同样的int值，但是并不要求不同的程序执行过程中返回同样的值。</li>
+<li>如果两个类使用equals方法比较相等，则他们的hashcode返回的int值必须要相同。</li>
+<li>两个不同的类在equals方法比较是不同的，但是并不要求他们的hashcode方法一定要返回不同的int值。不同的对象的hashcode返回不同的int值能够有效的提高hash表的执行效率。</li>
+</ul>
+
+
+<p>从上面的要求中我们不难看出，java并没有强制要求对hashcode的实现方法，只是提供了约束条件。文档中对于hashcode的说明中有一句话提到了对象的地址：</p>
+
+<blockquote><p>As much as is reasonably practical, the hashCode method defined by class Object does return distinct integers for distinct objects. (This is typically implemented by converting the internal address of the object into an integer, but this implementation technique is not required by the JavaTM programming language.)</p></blockquote>
+
+<p>由此可以看出java并没有强制要求使用地址作为hashcode的返回值。</p>
+
+<h3>hashcode的默认实现</h3>
+
+<p>你可以通过<em>System.identityHashCode(o)</em>来获取o的hashcode，identity hash code会调用hashcode方法，无论hashcode是否被重写。<br/>
+hashcode方法是native的，所以hashcode的默认实现取决于使用的JVM，目前使用最多的是hotspot虚拟机，所以一下内容均在虚拟机是hotspot的前提下进行。<br/>
+hotspot默认有以下几种实现方式：</p>
+
+<ol>
+<li>A randomly generated number.</li>
+<li>A function of memory address of the object.</li>
+<li>A hardcoded 1 (used for sensitivity testing.)</li>
+<li>A sequence.</li>
+<li>The memory address of the object, cast to int.</li>
+<li>Thread state combined with <a href="https://en.wikipedia.org/wiki/Xorshift">xorshift</a></li>
+</ol>
+
+
+<p>openJDK6和openJDK7使用第一种方式。 <br/>
+openJDK8使用第四种方式。<br/>
+所以hashcode的实现和地址是没有关系的。<br/>
+本节主要基于<a href="https://srvaroa.github.io/jvm/java/openjdk/biased-locking/2017/01/30/hashCode.html">点击这里</a></p>
+
+<h3>后记</h3>
+
+<p>openJDK中生成hashcode值的代码如下：</p>
+
+<pre><code class="java">    685   mark = monitor-&gt;header();  
+    ...   
+    687   hash = mark-&gt;hash();    
+    688   if (hash == 0) {  
+    689     hash = get_next_hash(Self, obj);  
+    ...  
+    701   } 
+    ...  
+    703   return hash;  
+</code></pre>
+
+<p>由代码可以看出类的hashcode只会被计算一次，一旦计算好了就不会再有变动。</p>
+]]></content>
+  </entry>
+  
+</feed>

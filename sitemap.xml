@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://crazyzfk.github.io/blog/2018/03/19/reflection-in-java/</loc>
+<lastmod>2018-03-19T20:40:25+08:00</lastmod>
+</url>
+<url>
+<loc>http://crazyzfk.github.io/blog/2018/03/19/for-vs-foreach-in-java/</loc>
+<lastmod>2018-03-19T20:30:23+08:00</lastmod>
+</url>
+<url>
+<loc>http://crazyzfk.github.io/blog/2017/04/16/serialization-in-java/</loc>
+<lastmod>2017-04-16T10:45:10+08:00</lastmod>
+</url>
+<url>
+<loc>http://crazyzfk.github.io/blog/2017/04/08/hashcode-in-java/</loc>
+<lastmod>2017-04-08T10:45:10+08:00</lastmod>
+</url>
+<url>
 <loc>http://crazyzfk.github.io/blog/archives/</loc>
 </url>
 <url>
 <loc>http://crazyzfk.github.io/</loc>
+</url>
+<url>
+<loc>http://crazyzfk.github.io/blog/categories/java/</loc>
 </url>
 </urlset>
