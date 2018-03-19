@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | My Octopress Blog]]></title>
+  <title><![CDATA[Category: Java | 张发可的技术点滴]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2018-03-19T22:15:34+08:00</updated>
+  <updated>2018-03-19T22:27:13+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[zfk]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
