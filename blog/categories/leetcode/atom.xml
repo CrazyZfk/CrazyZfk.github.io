@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leetcode | 张发可的技术点滴]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-03-09T20:53:45+08:00</updated>
+  <updated>2019-03-09T21:01:56+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -22,7 +22,7 @@
 
 <h4>代码一</h4>
 
-<pre><code class="c">int* twoSum(int* nums, int numsSize, int target) {
+<pre><code class="C">int* twoSum(int* nums, int numsSize, int target) {
     int i;
     int j;
     int temp;
@@ -42,7 +42,7 @@
 
 <h5>测试结果</h5>
 
-<pre><code class="shell">Wrong Answer
+<pre><code>Wrong Answer
 Details 
 Input
 [3,3]
@@ -95,7 +95,7 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 
 <h3>threesum</h3>
 
-<pre><code class="c">int * sort(int *nums,int size){
+<pre><code class="C">int * sort(int *nums,int size){
     int i=0;
     int j=0;
     int tmp;
