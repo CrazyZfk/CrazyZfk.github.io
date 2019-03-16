@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leetcode | 张发可的技术点滴]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-03-09T21:01:56+08:00</updated>
+  <updated>2019-03-16T20:57:22+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -93,7 +93,7 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 
 <p>没有把握好细节部分的处理</p>
 
-<h3>threesum</h3>
+<h3>threesum 1</h3>
 
 <pre><code class="C">int * sort(int *nums,int size){
     int i=0;
@@ -170,6 +170,99 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
 <h4>测试结果</h4>
 
 <p>Time Limit Exceeded</p>
+
+<h4>threesum 2</h4>
+
+<blockquote><p>使用双指针解决复杂度高的问题，使用链表解决内存限制。</p></blockquote>
+
+<pre><code class="C">struct Node{
+    int a;
+    int b;
+    int c;
+    struct Node *next;
+};
+void sort(int *list,int size){
+    int i,j,tmp,k;
+    for(i=0;i&lt;size-1;i++){
+        for(j=0;j&lt;size-i-1;j++){
+            if(list[j]&gt;list[j+1]){
+                tmp=list[j];
+                list[j]=list[j+1];
+                list[j+1]=tmp;
+            }
+        }
+    }
+}
+int** threeSum(int* nums, int numsSize, int* returnSize){
+    int i,left,right,sum;
+    int **result=NULL;
+    struct Node *head=NULL;
+    struct Node *curr=NULL;
+    struct Node *pre=NULL;
+    int *value;
+    sort(nums,numsSize);
+    for(i=0;i&lt;numsSize-1;i++){
+        if(i&gt;0&amp;&amp;nums[i]==nums[i-1]){
+            continue;
+        }
+        left=i+1;
+        right=numsSize-1;
+        while(left&lt;right){
+            sum=nums[i]+nums[left]+nums[right];
+            if(sum==0){
+                (*returnSize)++;
+                if(!head){
+                    head=(struct Node*)malloc(sizeof(struct Node));
+                    curr=head;
+                }else{
+                    curr=(struct Node*)malloc(sizeof(struct Node));
+                }
+                curr-&gt;a=nums[i];
+                curr-&gt;b=nums[left];
+                curr-&gt;c=nums[right];
+                curr-&gt;next=NULL;
+                if(pre){
+                    pre-&gt;next=curr;
+                }
+                pre=curr;
+
+                while(left&lt;right&amp;&amp;nums[left]==nums[left+1]){
+                    left++;
+                }
+                while(left&lt;right&amp;&amp;nums[right]==nums[right-1]){
+                    right--;
+                }
+            }
+            if(sum&lt;0){
+                left++;
+            }else{
+                right--;
+            }
+
+        }
+    }
+    result=(int **)malloc((*returnSize)*sizeof(int*));
+    i=0;
+    while(head){
+        value=(int *)malloc(sizeof(int)*3);
+        value[0]=head-&gt;a;
+        value[1]=head-&gt;b;
+        value[2]=head-&gt;c;
+        result[i++]=value;
+        curr=head;
+        head=head-&gt;next;
+        free(curr);
+    }
+    return result;
+}
+</code></pre>
+
+<h4>测试结果</h4>
+
+<pre><code class="bash">Details 
+Runtime: 168 ms, faster than 31.01% of C online submissions for 3Sum.
+Memory Usage: 24.7 MB, less than 87.50% of C online submissions for 3Sum.
+</code></pre>
 ]]></content>
   </entry>
   
