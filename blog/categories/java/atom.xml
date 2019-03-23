@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | 张发可的技术点滴]]></title>
+  <title><![CDATA[Category: Java | crazyzfk's blog]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-03-16T20:57:22+08:00</updated>
+  <updated>2019-03-23T15:44:21+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Leetcode | 张发可的技术点滴]]></title>
+  <title><![CDATA[Category: Leetcode | crazyzfk's blog]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-03-16T20:57:22+08:00</updated>
+  <updated>2019-03-23T15:44:21+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Add Two Numbers]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/03/23/Add-Two-Numbers/"/>
+    <updated>2019-03-23T15:35:00+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/03/23/Add-Two-Numbers</id>
+    <content type="html"><![CDATA[<h3>我的解法</h3>
+
+<pre><code class="c">
+void add(int *value,int *step){
+    if(*value&gt;=10){
+        *step=*value/10;
+        *value%=10;
+    }else
+    {
+        *step=0;
+    }
+
+}
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
+    int step=0,tmpValue;
+    struct ListNode *result=NULL;
+    struct ListNode *current=NULL;
+    struct ListNode *pre=NULL;
+    for(;l1!=NULL&amp;&amp;l2!=NULL;l1=l1-&gt;next,l2=l2-&gt;next){
+        tmpValue=l1-&gt;val+l2-&gt;val+step;
+        add(&amp;tmpValue,&amp;step);
+        current=(struct ListNode*)malloc(sizeof(struct ListNode));
+
+        current-&gt;val=tmpValue;
+        if(!pre&amp;&amp;!result){
+            result=current;
+            pre=current;
+        }else
+        {
+            pre-&gt;next=current;
+            pre=current;
+        }
+    }
+    if(l1){
+        for(;l1;l1=l1-&gt;next){
+            current=(struct ListNode*)malloc(sizeof(struct ListNode));
+            tmpValue=l1-&gt;val+step;
+            add(&amp;tmpValue,&amp;step);
+            current-&gt;val=tmpValue;
+            pre-&gt;next=current;
+            pre=current;
+        }
+    }
+    if(l2){
+        for(;l2;l2=l2-&gt;next){
+            current=(struct ListNode*)malloc(sizeof(struct ListNode));
+            tmpValue=l2-&gt;val+step;
+            add(&amp;tmpValue,&amp;step);
+            current-&gt;val=tmpValue;
+            pre-&gt;next=current;
+            pre=current;
+        }
+    }
+    if(step&gt;0){
+        current=(struct ListNode*)malloc(sizeof(struct ListNode));
+        current-&gt;val=step;
+        pre-&gt;next=current;
+        pre=current;
+    }
+    current-&gt;next=NULL;
+    return result;
+}
+</code></pre>
+
+<h3>运行结果</h3>
+
+<pre><code class="bash">Runtime: 32 ms, faster than 47.09% of C online submissions for Add Two Numbers.
+Memory Usage: 17.9 MB, less than 25.00% of C online submissions for Add Two Numbers.
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Two Sum，three Sum]]></title>
