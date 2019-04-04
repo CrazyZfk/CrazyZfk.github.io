@@ -1,0 +1,82 @@
+<p>layout: post
+title:  &ldquo; Longest Substring Without Repeating Characters&rdquo;
+date:   2019-04-03 20:00:00 +0800
+categories: leetcode</p>
+
+<h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">len</span><span class="p">,</span><span class="n">max</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sp</span><span class="o">=</span><span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">max</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">i</span><span class="o">=*</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">len</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">sp</span><span class="o">-=</span><span class="n">len</span><span class="o">-</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="o">&gt;</span><span class="n">max</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">max</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">128</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="o">&gt;</span><span class="n">max</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">max</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>运行结果</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">28</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">38.82</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Substring</span> <span class="n">Without</span> <span class="n">Repeating</span> <span class="n">Characters</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.1</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">100.00</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Substring</span> <span class="n">Without</span> <span class="n">Repeating</span> <span class="n">Characters</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+

@@ -1,0 +1,1410 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>张发可的技术点滴</title>
+  <meta name="author" content="zfk">
+
+  
+  <meta name="description" content="layout: post
+title: &ldquo; Longest Substring Without Repeating Characters&rdquo;
+date: 2019-04-03 20:00:00 +0800
+categories: leetcode 我的代码 代码一 1
+2
+3 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://crazyzfk.github.io/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="张发可的技术点滴" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">张发可的技术点滴</a></h1>
+  
+    <h2>多看代码多学习.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="crazyzfk.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2019/04/03/Longest-Substring-Without-Repeating-Characters/">Longest Substring Without Repeating Characters</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2019-04-03T00:00:00+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2019</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>layout: post
+title:  &ldquo; Longest Substring Without Repeating Characters&rdquo;
+date:   2019-04-03 20:00:00 +0800
+categories: leetcode</p>
+
+<h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">len</span><span class="p">,</span><span class="n">max</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sp</span><span class="o">=</span><span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">max</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">i</span><span class="o">=*</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">len</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">sp</span><span class="o">-=</span><span class="n">len</span><span class="o">-</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="o">&gt;</span><span class="n">max</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">max</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">128</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="o">&gt;</span><span class="n">max</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">max</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>运行结果</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">28</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">38.82</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Substring</span> <span class="n">Without</span> <span class="n">Repeating</span> <span class="n">Characters</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.1</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">100.00</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Substring</span> <span class="n">Without</span> <span class="n">Repeating</span> <span class="n">Characters</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2019/03/09/two-sum/">Two Sum，three Sum</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2019-03-09T17:00:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2019</span></span> <span class='time'>5:00 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="kt">int</span><span class="o">*</span> <span class="nf">twoSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numsSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">temp</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">target</span><span class="o">-</span><span class="n">temp</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]){</span>
+</span><span class='line'>                <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">values</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>测试结果</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="n">Wrong</span> <span class="n">Answer</span>
+</span><span class='line'><span class="n">Details</span>
+</span><span class='line'><span class="n">Input</span>
+</span><span class='line'><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+</span><span class='line'><span class="mi">6</span>
+</span><span class='line'><span class="n">Output</span>
+</span><span class='line'><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</span><span class='line'><span class="n">Expected</span>
+</span><span class='line'><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>分析</h5>
+
+<p>j的初始值应当比i大才能获取的是数组中的两个。</p>
+
+<h4>代码二</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="kt">int</span><span class="o">*</span> <span class="nf">twoSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numsSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">foundflag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">temp</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">target</span><span class="o">-</span><span class="n">temp</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]){</span>
+</span><span class='line'>                <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">foundflag</span><span class="o">=</span><span class="mi">1</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">floudflag</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">values</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>测试结果</h5>
+
+<p>Details
+Runtime: 128 ms, faster than 42.13% of C online submissions for Two Sum.
+Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
+
+<h3>总结</h3>
+
+<p>没有把握好细节部分的处理</p>
+
+<h3>threesum</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="kt">int</span> <span class="o">*</span> <span class="nf">sort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">nums</span><span class="p">,</span><span class="kt">int</span> <span class="n">size</span><span class="p">){</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">tmp</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span><span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">));</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>      <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">size</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;</span><span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]){</span>
+</span><span class='line'>                <span class="n">tmp</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'>                <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>                <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">tmp</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">int</span><span class="o">**</span> <span class="nf">threeSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numsSize</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">returnSize</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">l</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">flag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">search</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">equal</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">uniq</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span> <span class="n">in_result</span><span class="p">,</span><span class="o">*</span><span class="n">new_one</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">**</span><span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">**</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">k</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">k</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>                    <span class="kt">int</span> <span class="o">*</span><span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>                    <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>                    <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'>                    <span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+</span><span class='line'>                    <span class="n">equal</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">uniq</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">new_one</span><span class="o">=</span><span class="n">sort</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>                    <span class="k">for</span><span class="p">(</span><span class="n">search</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">search</span><span class="o">&lt;</span><span class="n">flag</span><span class="p">;</span><span class="n">search</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                      <span class="n">in_result</span><span class="o">=</span><span class="n">sort</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">search</span><span class="p">],</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>                        <span class="k">for</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">l</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span><span class="n">l</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                          <span class="k">if</span><span class="p">(</span><span class="n">in_result</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">!=</span><span class="n">new_one</span><span class="p">[</span><span class="n">l</span><span class="p">]){</span>
+</span><span class='line'>                              <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                          <span class="p">}</span>
+</span><span class='line'>                        <span class="p">}</span>
+</span><span class='line'>                      <span class="k">if</span><span class="p">(</span><span class="n">l</span><span class="o">==</span><span class="mi">3</span><span class="p">){</span>
+</span><span class='line'>                          <span class="n">uniq</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                          <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                      <span class="p">}</span>
+</span><span class='line'>                        <span class="n">free</span><span class="p">(</span><span class="n">in_result</span><span class="p">);</span>
+</span><span class='line'>                    <span class="p">}</span>
+</span><span class='line'>                    <span class="k">if</span><span class="p">(</span><span class="n">uniq</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>                        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                    <span class="p">}</span>
+</span><span class='line'>                    <span class="n">flag</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span><span class="o">**</span><span class="p">)</span><span class="n">realloc</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="n">flag</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">));</span>
+</span><span class='line'>                    <span class="n">result</span><span class="p">[</span><span class="n">flag</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">value</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">free</span><span class="p">(</span><span class="n">new_one</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="o">*</span><span class="n">returnSize</span><span class="o">=</span><span class="n">flag</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>测试结果</h4>
+
+<p>Time Limit Exceeded</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/03/19/reflection-in-java/">Reflection-in-java</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-03-19T20:40:25+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>8:40 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>java的反射机制是java的一个重要的特性，使用反射机制可以使java具有更好的灵活性。有时候我们需要动态的获取类的信息而这些信息有可能是在编译时是获取不到的，这个使用使用反射机制就能很好的解决问题。</p>
+
+<h2>RTTI</h2>
+
+<p>RTTI的含义：在运行时识别一个对象的类型。</p>
+
+<h3>class对象</h3>
+
+<p>类时程序的一部分，每个类都有一个Class对象，每当编写并编译一个新类就会产生一个Class对象。<br/>
+Class对象仅在需要的时候被加载，Class.forName()是Class的一个静态方法，该方法参数为对象的名称，返回的为Class对象的引用。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">Class</span> <span class="n">c</span><span class="o">=</span><span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;X&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// 当找不到对应的类时就会报错</span>
+</span><span class='line'>          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>无论何时，只要你想在运行时使用类型信息，就必须首先获得恰当的Class对象的引用，Class.forName()就是实现此功能的便捷途径。使用Class.forName()你不必持有一个该类型的对象，只需要知道类型的名称就可以了，当然如果你持有该类型的对象，你也可以调用对象的getClass方法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">x</span><span class="o">.</span><span class="na">getClass</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>x是对象。<br/>
+通过Class对象你可以发现你想要了解的所有信息：</p>
+
+<ul>
+<li>类的简单名称和权限定名称</li>
+<li>类的直接基类</li>
+<li>类实现的接口</li>
+<li>···</li>
+</ul>
+
+
+<p><strong>类字面常量：</strong></p>
+
+<p>java提供了另一种方法来生成对Class对象的引用，就是类字面常量</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">X</span><span class="o">.</span><span class="na">class</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>X是类而不是对象。<br/>
+与使用Class.forName()相比，使用类字面常量有以下的优点：</p>
+
+<ol>
+<li>更加简单和安全，因为在编译时就受到检查。</li>
+<li>forName()是方法调用，所以类字面常量更加高效。</li>
+<li>使用类字面常量时不会自动初始化该Class对象。</li>
+</ol>
+
+
+<p>类字面常量不仅可以应用于普通的类，也可以应用于接口、数组以及基本数据类型。另外对于基本数据类型的包装类，还有一个标字段TYPE。TYPE字段是一个引用，指向对应的基本数据类型的额Class对象，如下所示：</p>
+
+<table>
+<thead>
+<tr>
+<th>boolean.class  </th>
+<th>Boolean.TYPE       </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>char.class     </td>
+<td>Character.TYPE </td>
+</tr>
+<tr>
+<td>byte.class     </td>
+<td>Byte.TYPE      </td>
+</tr>
+<tr>
+<td>short.class        </td>
+<td>Short.TYPE     </td>
+</tr>
+<tr>
+<td>int.class      </td>
+<td>Integer.TYPE       </td>
+</tr>
+<tr>
+<td>long.class     </td>
+<td>Long.TYPE      </td>
+</tr>
+<tr>
+<td>float.class        </td>
+<td>Float.TYPE     </td>
+</tr>
+<tr>
+<td>double.class       </td>
+<td>Double.TYPE        </td>
+</tr>
+<tr>
+<td>void.class     </td>
+<td>Void.TYPE      </td>
+</tr>
+</tbody>
+</table>
+
+
+<p><strong>泛化的Class引用：</strong><br/>
+Class引用总是指向某个Class对象，它可以制造类的实例，并包含可作用于这些实例的所有方法代码。Class引用表示的就是它所指向的对象的确切类型，而该对象就是Class类的一个对象（Class是所有类的类）。<br/>
+java5 以后泛型的引入使得Class所表示的类型更加明确</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Class</span> <span class="n">intClass</span><span class="o">=</span><span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">;</span><span class="c1">//编译器会有警告  </span>
+</span><span class='line'><span class="n">Class</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">genericIntClass</span><span class="o">=</span><span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+</span><span class='line'><span class="n">intClass</span><span class="o">=</span><span class="kt">double</span><span class="o">.</span><span class="na">class</span><span class="o">;</span><span class="c1">//可以编译通过  </span>
+</span><span class='line'><span class="n">genericIntClass</span><span class="o">=</span><span class="kt">double</span><span class="o">.</span><span class="na">class</span><span class="o">;</span><span class="c1">//编译时报错</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>通过泛型可以让编译器强制执行额外的类型检查。</em></p>
+
+<h2>反射</h2>
+
+<p>Class类和java.lang.reflect类库一起对泛型的概念进行了支持，该类库包含了Field，Method以及Constructor（每个类都实现了Member接口）。这些类型的对象是由JVM在运行时创建的，用以表示未知类里对应的成员。<br/>
+RTTI和反射之间之间真正的区别在于：<br/>
+对于RTTI来说，编译器在编译时打开和检查class文件而对于反射来说，class文件在编译时是不可获取的，所以是在运行时打开和检查class文件。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/03/19/for-vs-foreach-in-java/">For-vs-foreach-in-java</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-03-19T20:30:23+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>8:30 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>一直觉得在java中使用foreach会带来一定的效率的提升，今天调研才发现并没有，看来事情还是要多调研，不能直视凭直觉来断定事情。</p>
+
+<h2>举例</h2>
+
+<p>如下两个例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">for</span><span class="o">(</span><span class="n">Object</span> <span class="nl">o:</span> <span class="n">objectArrayList</span><span class="o">){</span>
+</span><span class='line'>    <span class="n">o</span><span class="o">.</span><span class="na">DoSomthing</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">objectArrayList</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++){</span>
+</span><span class='line'>    <span class="n">objectArrayList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">DoSomthing</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>根据我查到的资料显示，其实他们两个编译后的代码时没有区别的，foreach只是比for看起来更加简洁，唯一说可能有性能差异的地方也就是for会每次计算列表的长度。<br/>
+不信你自己看<a href="http://stackoverflow.com/questions/256859/is-there-a-performance-difference-between-a-for-loop-and-a-for-each-loop">这里</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/04/16/serialization-in-java/">Serialization in Java</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-04-16T10:45:10+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:45 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>java序列化是java作为网络编程语言的一个重要特性，序列化使得java对象可以被转为字节码，用于对象的存储和传输。
+一个对象能被序列化就要实现java.io.Serializable：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'> <span class="o">*</span> <span class="nd">@author</span>  <span class="n">unascribed</span>
+</span><span class='line'> <span class="o">*</span> <span class="nd">@see</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectOutputStream</span>
+</span><span class='line'> <span class="o">*</span> <span class="nd">@see</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInputStream</span>
+</span><span class='line'> <span class="o">*</span> <span class="nd">@see</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectOutput</span>
+</span><span class='line'> <span class="o">*</span> <span class="nd">@see</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInput</span>
+</span><span class='line'> <span class="o">*</span> <span class="nd">@see</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">Externalizable</span>
+</span><span class='line'> <span class="o">*</span> <span class="nd">@since</span>   <span class="n">JDK1</span><span class="o">.</span><span class="mi">1</span>
+</span><span class='line'> <span class="o">*/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Serializable</span> <span class="o">{</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该接口是一个空接口，只是用于标记如果没有实现该接口就不能序列化，其中writeObject方法会检测传入的类是否实现了java.io.Serializable接口，如果类没有实现java.io.Serializable接口序列号时会导致报错。</p>
+
+<h2>实现java.io.Serializable</h2>
+
+<p>假设有这样一个类没有实现java.io.Serializable：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">class</span> <span class="nc">Student</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getGrade</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setGrade</span><span class="o">(</span><span class="kt">int</span> <span class="n">grade</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">grade</span> <span class="o">=</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对该类调用writeObject：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SerializationTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">ByteArrayOutputStream</span> <span class="n">baos</span><span class="o">=</span><span class="k">new</span> <span class="nf">ByteArrayOutputStream</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">ObjectOutputStream</span> <span class="n">oos</span><span class="o">=</span><span class="k">new</span> <span class="nf">ObjectOutputStream</span><span class="o">(</span><span class="n">baos</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">Student</span> <span class="n">student</span><span class="o">=</span><span class="k">new</span> <span class="nf">Student</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">student</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">student</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">student</span><span class="o">.</span><span class="na">setGrade</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">ObjectInputStream</span> <span class="n">ois</span><span class="o">=</span><span class="k">new</span> <span class="nf">ObjectInputStream</span><span class="o">(</span><span class="k">new</span> <span class="nf">ByteArrayInputStream</span><span class="o">(</span><span class="n">baos</span><span class="o">.</span><span class="na">toByteArray</span><span class="o">()));</span>
+</span><span class='line'>          <span class="n">Student</span> <span class="n">student1</span><span class="o">=(</span><span class="n">Student</span><span class="o">)</span> <span class="n">ois</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getAge</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getGrade</span><span class="o">());</span>
+</span><span class='line'>      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// TODO Auto-generated catch block</span>
+</span><span class='line'>          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">){</span>
+</span><span class='line'>          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>执行结果如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">NotSerializableException</span><span class="o">:</span> <span class="n">serialization</span><span class="o">.</span><span class="na">Student</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectOutputStream</span><span class="o">.</span><span class="na">writeObject0</span><span class="o">(</span><span class="n">ObjectOutputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1183</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectOutputStream</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">ObjectOutputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">347</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">serialization</span><span class="o">.</span><span class="na">SerializationTest</span><span class="o">.</span><span class="na">main</span><span class="o">(</span><span class="n">SerializationTest</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">20</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>writeObject方法中会验证传入的参数是否实现了java.io.Serializable：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">writeString</span><span class="o">((</span><span class="n">String</span><span class="o">)</span> <span class="n">obj</span><span class="o">,</span> <span class="n">unshared</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">cl</span><span class="o">.</span><span class="na">isArray</span><span class="o">())</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">writeArray</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">desc</span><span class="o">,</span> <span class="n">unshared</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="n">Enum</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">writeEnum</span><span class="o">((</span><span class="n">Enum</span><span class="o">)</span> <span class="n">obj</span><span class="o">,</span> <span class="n">desc</span><span class="o">,</span> <span class="n">unshared</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="n">Serializable</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">writeOrdinaryObject</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">desc</span><span class="o">,</span> <span class="n">unshared</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">extendedDebugInfo</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotSerializableException</span><span class="o">(</span>
+</span><span class='line'>                    <span class="n">cl</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;\n&quot;</span> <span class="o">+</span> <span class="n">debugInfoStack</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotSerializableException</span><span class="o">(</span><span class="n">cl</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>serialVersionUID</h2>
+
+<p>序列化对象在被反序列化为类的时候会检验serialVersionUID，如果没有手动指定该值会在序列化时根据类的信息生成一个。序列化时由编译器生成的serialVersionUID会高度依赖类的细节，而且和编译器的实现有很大的关系，也就是说可能存在同样的类在不同的编译器中生成不同的serialVersionUID的情况，或者同样的类仅仅因为改变了类的细节就会导致产生的serialVersionUID不同。</p>
+
+<h3>这种不同会有什么影响？</h3>
+
+<p>我们先把上个例子中的student写入到文件中:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">FileOutputStream</span> <span class="n">fos</span><span class="o">=</span><span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="s">&quot;student.ser&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">ObjectOutputStream</span> <span class="n">oos</span><span class="o">=</span><span class="k">new</span> <span class="nf">ObjectOutputStream</span><span class="o">(</span><span class="n">fos</span><span class="o">);</span>
+</span><span class='line'><span class="n">Student</span> <span class="n">student</span><span class="o">=</span><span class="k">new</span> <span class="nf">Student</span><span class="o">();</span>
+</span><span class='line'><span class="n">student</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">student</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+</span><span class='line'><span class="n">student</span><span class="o">.</span><span class="na">setGrade</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+</span><span class='line'><span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在将student修改为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">class</span> <span class="nc">Student</span> <span class="kd">implements</span> <span class="n">Serializable</span><span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">String</span> <span class="n">school</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getGrade</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setGrade</span><span class="o">(</span><span class="kt">int</span> <span class="n">grade</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">grade</span> <span class="o">=</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getSchool</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">school</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSchool</span><span class="o">(</span><span class="n">String</span> <span class="n">school</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">school</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在student类中添加了一个字段school，然后在从文件中读取：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">FileInputStream</span> <span class="n">fis</span><span class="o">=</span><span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="s">&quot;student.ser&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">ObjectInputStream</span> <span class="n">ois</span><span class="o">=</span><span class="k">new</span> <span class="nf">ObjectInputStream</span><span class="o">(</span><span class="n">fis</span><span class="o">);</span>
+</span><span class='line'><span class="n">Student</span> <span class="n">student1</span><span class="o">=(</span><span class="n">Student</span><span class="o">)</span> <span class="n">ois</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+</span><span class='line'><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getAge</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getGrade</span><span class="o">());</span>
+</span><span class='line'><span class="n">ois</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'><span class="n">fis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>就会出现如下错误</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">InvalidClassException</span><span class="o">:</span> <span class="n">serialization</span><span class="o">.</span><span class="na">Student</span><span class="o">;</span> <span class="n">local</span> <span class="kd">class</span> <span class="nc">incompatible</span><span class="o">:</span> <span class="n">stream</span> <span class="n">classdesc</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1205959179532190345</span><span class="o">,</span> <span class="n">local</span> <span class="kd">class</span> <span class="nc">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3693389777067287057</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectStreamClass</span><span class="o">.</span><span class="na">initNonProxy</span><span class="o">(</span><span class="n">ObjectStreamClass</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">617</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInputStream</span><span class="o">.</span><span class="na">readNonProxyDesc</span><span class="o">(</span><span class="n">ObjectInputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1622</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInputStream</span><span class="o">.</span><span class="na">readClassDesc</span><span class="o">(</span><span class="n">ObjectInputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1517</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInputStream</span><span class="o">.</span><span class="na">readOrdinaryObject</span><span class="o">(</span><span class="n">ObjectInputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1771</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInputStream</span><span class="o">.</span><span class="na">readObject0</span><span class="o">(</span><span class="n">ObjectInputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1350</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">ObjectInputStream</span><span class="o">.</span><span class="na">readObject</span><span class="o">(</span><span class="n">ObjectInputStream</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">370</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">at</span> <span class="n">serialization</span><span class="o">.</span><span class="na">SerializationTest</span><span class="o">.</span><span class="na">main</span><span class="o">(</span><span class="n">SerializationTest</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">27</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中错误很清晰的告诉你错误原因是本地的类和读取的类的serialVersionUID不等，这是我们指定新student类的serialVersionUID值为-1205959179532190345</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1205959179532190345L</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再次从文件中读取就没有问题。<br/>
+<strong>因此在序列化类时指定类的serialVersionUID值对于类是很有必要的</strong></p>
+
+<h3>serialVersionUID的主要作用</h3>
+
+<p>serialVersionUID主要的目的是记录类的不同版本，使得类被反序列化时序列成正确的版本。指定类的serialVersionUID也可以有效的避免不同JVM实现导致的反序列化失败。</p>
+
+<h2>序列化字段</h2>
+
+<p>有时我们不需要序列化全字段，只需要将类中的指定部分字段序列化。首先我们要明确的是类中的静态变量是不会序列化的，因为静态字段是属于类的，序列化是针对类的实例的。</p>
+
+<h3>使用Externalizable</h3>
+
+<p>java.io.Externalizable是java.io.Serializable的子接口，该接口有两个方法</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">writeExternal</span><span class="o">(</span><span class="n">ObjectOutput</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">;</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">readExternal</span><span class="o">(</span><span class="n">ObjectInput</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ClassNotFoundException</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在这两个方法中可以指定那些字段序列化（<a href="http://www.cnblogs.com/chenfei0801/archive/2013/04/06/3002146.html">点击了解更多</a>）。<br/>
+<strong>实现这个接口需要类的存在默认的具有public访问权限的构造函数</strong></p>
+
+<h3>transient</h3>
+
+<p>被transient修饰的字段是不会被序列化的。例如我们将student类修改为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">class</span> <span class="nc">Student</span> <span class="kd">implements</span> <span class="n">Serializable</span><span class="o">{</span>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">  * </span>
+</span><span class='line'><span class="cm">  */</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1205959179532190345L</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">transient</span> <span class="n">String</span> <span class="n">school</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getGrade</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setGrade</span><span class="o">(</span><span class="kt">int</span> <span class="n">grade</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">grade</span> <span class="o">=</span> <span class="n">grade</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getSchool</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">school</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSchool</span><span class="o">(</span><span class="n">String</span> <span class="n">school</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">school</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用transient修饰school，然后我们序列化后再读取：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SerializationTest</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">//ByteArrayOutputStream baos=new ByteArrayOutputStream();</span>
+</span><span class='line'>          <span class="n">FileOutputStream</span> <span class="n">fos</span><span class="o">=</span><span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="s">&quot;student.ser&quot;</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">ObjectOutputStream</span> <span class="n">oos</span><span class="o">=</span><span class="k">new</span> <span class="nf">ObjectOutputStream</span><span class="o">(</span><span class="n">fos</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">Student</span> <span class="n">student</span><span class="o">=</span><span class="k">new</span> <span class="nf">Student</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">student</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">student</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">student</span><span class="o">.</span><span class="na">setGrade</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">FileInputStream</span> <span class="n">fis</span><span class="o">=</span><span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="s">&quot;student.ser&quot;</span><span class="o">);</span>
+</span><span class='line'>          <span class="c1">//ObjectInputStream ois=new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));</span>
+</span><span class='line'>          <span class="n">ObjectInputStream</span> <span class="n">ois</span><span class="o">=</span><span class="k">new</span> <span class="nf">ObjectInputStream</span><span class="o">(</span><span class="n">fis</span><span class="o">);</span>
+</span><span class='line'>          <span class="n">Student</span> <span class="n">student1</span><span class="o">=(</span><span class="n">Student</span><span class="o">)</span> <span class="n">ois</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getAge</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getGrade</span><span class="o">()+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="n">student1</span><span class="o">.</span><span class="na">getSchool</span><span class="o">());</span>
+</span><span class='line'>          <span class="n">ois</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">fis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">oos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>          <span class="n">fos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// TODO Auto-generated catch block</span>
+</span><span class='line'>          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">){</span>
+</span><span class='line'>          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>执行的结果如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">name</span><span class="o">,</span><span class="mi">10</span><span class="o">,</span><span class="mi">6</span><span class="o">,</span><span class="kc">null</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由此可见school并没有被序列化，所以反序列化的值为null。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/04/08/hashcode-in-java/">Hashcode in Java</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-04-08T10:45:10+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:45 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>最近在知乎上看到一个关于hashcode的问答（<a href="https://www.zhihu.com/question/57356225/answer/152881868">问答地址</a>），让我了解了java对于hashcode的处理并没有我想的那么简单。以前一直以为对象hashcode计算的结果是指向对象的引用，如果是这种情况那么至少有下面两种情况不满足：</p>
+
+<ul>
+<li>现在计算机基本都是64位的了，从hashcode的源码可以看到实际hashcode函数返回的是int，int才32位。</li>
+<li>jvm在GC时需要移动对象这种移动会导致对象在堆中的地址改变，如果每次GC都要重新计算对象的hashcode，那么GC的工作就不是那么存粹了出现了JVM操作用户代码的情况。</li>
+</ul>
+
+
+<h3>hashcode到底是什么</h3>
+
+<p>根据<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html#hashCode(">oracle关于hashcode的文档说明</a>)，hashcode的生成有下面三个要求：</p>
+
+<ul>
+<li>在程序的一次执行过程中无论何时调用类的hashcode方法都要返回同样的int值，但是并不要求不同的程序执行过程中返回同样的值。</li>
+<li>如果两个类使用equals方法比较相等，则他们的hashcode返回的int值必须要相同。</li>
+<li>两个不同的类在equals方法比较是不同的，但是并不要求他们的hashcode方法一定要返回不同的int值。不同的对象的hashcode返回不同的int值能够有效的提高hash表的执行效率。</li>
+</ul>
+
+
+<p>从上面的要求中我们不难看出，java并没有强制要求对hashcode的实现方法，只是提供了约束条件。文档中对于hashcode的说明中有一句话提到了对象的地址：</p>
+
+<blockquote><p>As much as is reasonably practical, the hashCode method defined by class Object does return distinct integers for distinct objects. (This is typically implemented by converting the internal address of the object into an integer, but this implementation technique is not required by the JavaTM programming language.)</p></blockquote>
+
+<p>由此可以看出java并没有强制要求使用地址作为hashcode的返回值。</p>
+
+<h3>hashcode的默认实现</h3>
+
+<p>你可以通过<em>System.identityHashCode(o)</em>来获取o的hashcode，identity hash code会调用hashcode方法，无论hashcode是否被重写。<br/>
+hashcode方法是native的，所以hashcode的默认实现取决于使用的JVM，目前使用最多的是hotspot虚拟机，所以一下内容均在虚拟机是hotspot的前提下进行。<br/>
+hotspot默认有以下几种实现方式：</p>
+
+<ol>
+<li>A randomly generated number.</li>
+<li>A function of memory address of the object.</li>
+<li>A hardcoded 1 (used for sensitivity testing.)</li>
+<li>A sequence.</li>
+<li>The memory address of the object, cast to int.</li>
+<li>Thread state combined with <a href="https://en.wikipedia.org/wiki/Xorshift">xorshift</a></li>
+</ol>
+
+
+<p>openJDK6和openJDK7使用第一种方式。 <br/>
+openJDK8使用第四种方式。<br/>
+所以hashcode的实现和地址是没有关系的。<br/>
+本节主要基于<a href="https://srvaroa.github.io/jvm/java/openjdk/biased-locking/2017/01/30/hashCode.html">点击这里</a></p>
+
+<h3>后记</h3>
+
+<p>openJDK中生成hashcode值的代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="mi">685</span>   <span class="n">mark</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">-&gt;</span><span class="n">header</span><span class="o">();</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="mi">687</span>   <span class="n">hash</span> <span class="o">=</span> <span class="n">mark</span><span class="o">-&gt;</span><span class="n">hash</span><span class="o">();</span>
+</span><span class='line'><span class="mi">688</span>   <span class="k">if</span> <span class="o">(</span><span class="n">hash</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'><span class="mi">689</span>     <span class="n">hash</span> <span class="o">=</span> <span class="n">get_next_hash</span><span class="o">(</span><span class="n">Self</span><span class="o">,</span> <span class="n">obj</span><span class="o">);</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="mi">701</span>   <span class="o">}</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="mi">703</span>   <span class="k">return</span> <span class="n">hash</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由代码可以看出类的hashcode只会被计算一次，一旦计算好了就不会再有变动。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2019/04/03/Longest-Substring-Without-Repeating-Characters/">Longest Substring Without Repeating Characters</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2019/03/09/two-sum/">Two Sum，three Sum</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/03/19/reflection-in-java/">Reflection-in-java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/03/19/for-vs-foreach-in-java/">For-vs-foreach-in-java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/04/16/serialization-in-java/">Serialization in Java</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section>  
+  <h1>Categories</h1>  
+  <ul id="categories">  
+    <li class='category'><a href='/blog/categories/java/'>java (4)</a></li>
+<li class='category'><a href='/blog/categories/leetcode/'>leetcode (1)</a></li>
+  
+  </ul>  
+</section>  
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2019 - zfk -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

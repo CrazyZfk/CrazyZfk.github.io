@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Leetcode | 张发可的技术点滴]]></title>
+  <link href="http://crazyzfk.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
+  <link href="http://crazyzfk.github.io/"/>
+  <updated>2019-04-03T21:04:36+08:00</updated>
+  <id>http://crazyzfk.github.io/</id>
+  <author>
+    <name><![CDATA[zfk]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Two Sum，three Sum]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/03/09/two-sum/"/>
+    <updated>2019-03-09T17:00:00+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/03/09/two-sum</id>
+    <content type="html"><![CDATA[<h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<pre><code class="C">int* twoSum(int* nums, int numsSize, int target) {
+    int i;
+    int j;
+    int temp;
+    int *values=(int *)malloc(2*sizeof(int));
+    for(i=0;i&lt;numsSize;i++){
+        temp=nums[i];
+        for(j=i;j&lt;numsSize;j++){
+            if(target-temp==nums[j]){
+                values[0]=i;
+                values[1]=j;
+            }
+        }
+    }
+    return values;
+}
+</code></pre>
+
+<h5>测试结果</h5>
+
+<pre><code>Wrong Answer
+Details 
+Input
+[3,3]
+6
+Output
+[1,1]
+Expected
+[0,1]
+</code></pre>
+
+<h5>分析</h5>
+
+<p>j的初始值应当比i大才能获取的是数组中的两个。</p>
+
+<h4>代码二</h4>
+
+<pre><code>int* twoSum(int* nums, int numsSize, int target) {
+    int i;
+    int j;
+    int temp;
+    int foundflag=0;
+    int *values=(int *)malloc(2*sizeof(int));
+    for(i=0;i&lt;numsSize;i++){
+        temp=nums[i];
+        for(j=i+1;j&lt;numsSize;j++){
+            if(target-temp==nums[j]){
+                values[0]=i;
+                values[1]=j;
+                foundflag=1
+                break;
+            }
+        }
+        if(floudflag==1){
+            break;
+        }
+    }
+    return values;
+}
+</code></pre>
+
+<h5>测试结果</h5>
+
+<p>Details
+Runtime: 128 ms, faster than 42.13% of C online submissions for Two Sum.
+Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
+
+<h3>总结</h3>
+
+<p>没有把握好细节部分的处理</p>
+
+<h3>threesum</h3>
+
+<pre><code class="C">int * sort(int *nums,int size){
+    int i=0;
+    int j=0;
+    int tmp;
+    int *result=(int*)malloc(size*sizeof(int *));
+    for(i=0;i&lt;size;i++){
+        result[i]=nums[i];
+    }
+    for(i=0;i&lt;size-1;i++){
+        for(j=0;j&lt;size-i-1;j++){
+            if(result[j]&gt;result[j+1]){
+                tmp=result[j];
+                result[j]=result[j+1];
+                result[j+1]=tmp;
+            }
+        }
+    }
+    return result;
+}
+int** threeSum(int* nums, int numsSize, int* returnSize) {
+    int i;
+    int j;
+    int k;
+    int l;
+    int m;
+    int flag=0;
+    int search;
+    int equal;
+    int uniq=0;
+    int * in_result,*new_one;
+    int **result=(int **)malloc(0);
+    for(i=0;i&lt;numsSize;i++){
+        for(j=i+1;j&lt;numsSize;j++){
+            for(k=j+1;k&lt;numsSize;k++){
+                if(nums[i]+nums[j]+nums[k]==0){
+                    int *value=(int*)malloc(3*sizeof(int));
+                    value[0]=nums[i];
+                    value[1]=nums[j];
+                    value[2]=nums[k];
+                    equal=0;
+                    uniq=0;
+                    new_one=sort(value,3);
+                    for(search=0;search&lt;flag;search++){
+                        in_result=sort(result[search],3);
+                        for(l=0;l&lt;3;l++){
+                            if(in_result[l]!=new_one[l]){
+                                break;
+                            }
+                        }
+                        if(l==3){
+                            uniq=1;
+                            break;
+                        }
+                        free(in_result);
+                    }
+                    if(uniq==1){
+                        break;
+                    }
+                    flag++;
+                    result=(int**)realloc(result,flag*sizeof(int*));
+                    result[flag-1]=value;
+                    free(new_one);
+                }
+            }
+
+        }
+    }
+    *returnSize=flag;
+    return result;
+}
+</code></pre>
+
+<h4>测试结果</h4>
+
+<p>Time Limit Exceeded</p>
+]]></content>
+  </entry>
+  
+</feed>
