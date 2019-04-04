@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leetcode | 张发可的技术点滴]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-04-04T08:54:34+08:00</updated>
+  <updated>2019-04-04T08:57:42+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Longest Substring Without Repeating Characters]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/04/03/Longest-Substring-Without-Repeating-Characters/"/>
+    <updated>2019-04-03T20:00:00+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/04/03/Longest-Substring-Without-Repeating-Characters</id>
+    <content type="html"><![CDATA[<h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<pre><code class="c">int lengthOfLongestSubstring(char* s) {
+    char *sp;
+    int array[128]={0};
+    int i,j,len,max;
+    sp=s;
+    len=0;
+    max=0;
+    while(*sp){
+        i=*sp;
+        if(array[i]==0){
+            len++;
+            array[i]=len;
+            sp++;
+        }else{
+            sp-=len-array[i];
+            if(len&gt;max){
+                max=len;
+            }
+            len=0;
+            for(j=0;j&lt;128;j++){
+                array[j]=0;
+            }
+        } 
+    }
+    if(len&gt;max){
+        max=len;
+    }
+    return max;
+
+}
+</code></pre>
+
+<h3>运行结果</h3>
+
+<pre><code>Runtime: 28 ms, faster than 38.82% of C online submissions for Longest Substring Without Repeating Characters.
+Memory Usage: 7.1 MB, less than 100.00% of C online submissions for Longest Substring Without Repeating Characters
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Two Sum，three Sum]]></title>
