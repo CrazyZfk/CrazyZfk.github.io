@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Leetcode | 张发可的技术点滴]]></title>
+  <title><![CDATA[Category: Leetcode | crazyzfk's blog]]></title>
   <link href="http://crazyzfk.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-04-04T08:57:42+08:00</updated>
+  <updated>2019-04-08T22:53:16+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -12,6 +12,85 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Add Two Numbers]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/04/08/add-two-numbers/"/>
+    <updated>2019-04-08T22:43:39+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/04/08/add-two-numbers</id>
+    <content type="html"><![CDATA[<h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<pre><code class="c">void add(int *value,int *step){
+    if(*value&gt;=10){
+        *step=*value/10;
+        *value%=10;
+    }else
+    {
+        *step=0;
+    }
+
+}
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
+    int step=0,tmpValue;
+    struct ListNode *result=NULL;
+    struct ListNode *current=NULL;
+    struct ListNode *pre=NULL;
+    for(;l1!=NULL&amp;&amp;l2!=NULL;l1=l1-&gt;next,l2=l2-&gt;next){
+        tmpValue=l1-&gt;val+l2-&gt;val+step;
+        add(&amp;tmpValue,&amp;step);
+        current=(struct ListNode*)malloc(sizeof(struct ListNode));
+
+        current-&gt;val=tmpValue;
+        if(!pre&amp;&amp;!result){
+            result=current;
+            pre=current;
+        }else
+        {
+            pre-&gt;next=current;
+            pre=current;
+        }
+    }
+    if(l1){
+        for(;l1;l1=l1-&gt;next){
+            current=(struct ListNode*)malloc(sizeof(struct ListNode));
+            tmpValue=l1-&gt;val+step;
+            add(&amp;tmpValue,&amp;step);
+            current-&gt;val=tmpValue;
+            pre-&gt;next=current;
+            pre=current;
+        }
+    }
+    if(l2){
+        for(;l2;l2=l2-&gt;next){
+            current=(struct ListNode*)malloc(sizeof(struct ListNode));
+            tmpValue=l2-&gt;val+step;
+            add(&amp;tmpValue,&amp;step);
+            current-&gt;val=tmpValue;
+            pre-&gt;next=current;
+            pre=current;
+        }
+    }
+    if(step&gt;0){
+        current=(struct ListNode*)malloc(sizeof(struct ListNode));
+        current-&gt;val=step;
+        pre-&gt;next=current;
+        pre=current;
+    }
+    current-&gt;next=NULL;
+    return result;
+}
+</code></pre>
+
+<h4>运行结果</h4>
+
+<pre><code>Runtime: 32 ms
+Memory Usage: 17.9 MB
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Longest Substring Without Repeating Characters]]></title>
@@ -144,6 +223,8 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 
 <h3>threesum</h3>
 
+<h4>代码一</h4>
+
 <pre><code class="C">int * sort(int *nums,int size){
     int i=0;
     int j=0;
@@ -219,6 +300,97 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
 <h4>测试结果</h4>
 
 <p>Time Limit Exceeded</p>
+
+<h4>代码二</h4>
+
+<pre><code class="c">struct Node{
+    int a;
+    int b;
+    int c;
+    struct Node *next;
+};
+void sort(int *list,int size){
+    int i,j,tmp,k;
+    for(i=0;i&lt;size-1;i++){
+        for(j=0;j&lt;size-i-1;j++){
+            if(list[j]&gt;list[j+1]){
+                tmp=list[j];
+                list[j]=list[j+1];
+                list[j+1]=tmp;
+            }
+        }
+    }
+}
+int** threeSum(int* nums, int numsSize, int* returnSize){
+    int i,left,right,sum;
+    int **result=NULL;
+    struct Node *head=NULL;
+    struct Node *curr=NULL;
+    struct Node *pre=NULL;
+    int *value;
+    sort(nums,numsSize);
+    for(i=0;i&lt;numsSize-1;i++){
+        if(i&gt;0&amp;&amp;nums[i]==nums[i-1]){
+            continue;
+        }
+        left=i+1;
+        right=numsSize-1;
+        while(left&lt;right){
+            sum=nums[i]+nums[left]+nums[right];
+            if(sum==0){
+                (*returnSize)++;
+                if(!head){
+                    head=(struct Node*)malloc(sizeof(struct Node));
+                    curr=head;
+                }else{
+                    curr=(struct Node*)malloc(sizeof(struct Node));
+                }
+                curr-&gt;a=nums[i];
+                curr-&gt;b=nums[left];
+                curr-&gt;c=nums[right];
+                curr-&gt;next=NULL;
+                if(pre){
+                    pre-&gt;next=curr;
+                }
+                pre=curr;
+
+                while(left&lt;right&amp;&amp;nums[left]==nums[left+1]){
+                    left++;
+                }
+                while(left&lt;right&amp;&amp;nums[right]==nums[right-1]){
+                    right--;
+                }
+                left++;
+                right--;
+            }else if(sum&lt;0){
+                left++;
+            }else{
+                right--;
+            }
+
+        }
+    }
+    result=(int **)malloc((*returnSize)*sizeof(int*));
+    i=0;
+    while(head){
+        value=(int *)malloc(sizeof(int)*3);
+        value[0]=head-&gt;a;
+        value[1]=head-&gt;b;
+        value[2]=head-&gt;c;
+        result[i++]=value;
+        curr=head;
+        head=head-&gt;next;
+        free(curr);
+    }
+    return result;
+}
+</code></pre>
+
+<h4>运行结果</h4>
+
+<pre><code>Runtime: 168 ms
+Memory Usage: 24.5 MB
+</code></pre>
 ]]></content>
   </entry>
   
