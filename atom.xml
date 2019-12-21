@@ -4,7 +4,7 @@
   <title><![CDATA[crazyzfk's blog]]></title>
   <link href="http://crazyzfk.github.io/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-12-15T13:08:07+08:00</updated>
+  <updated>2019-12-21T12:10:06+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ZigZag Conversion]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/12/21/zigzag-conversion/"/>
+    <updated>2019-12-21T12:08:10+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/12/21/zigzag-conversion</id>
+    <content type="html"><![CDATA[<h2>问题描述</h2>
+
+<p>在给定行数的情况下字符串 &ldquo;PAYPALISHIRING&rdquo; 可以被写成如下的之字型：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">P</span>   <span class="n">A</span>   <span class="n">H</span>   <span class="n">N</span>
+</span><span class='line'><span class="n">A</span> <span class="n">P</span> <span class="n">L</span> <span class="n">S</span> <span class="n">I</span> <span class="n">I</span> <span class="n">G</span>
+</span><span class='line'><span class="n">Y</span>   <span class="n">I</span>   <span class="n">R</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>按照行读取的字符串为："PAHNAPLSIIGYIR"</p>
+
+<p>写代码指定行数完成上面的转换</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">string</span> <span class="nf">convert</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numRows</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>例子1</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;PAYPALISHIRING&quot;</span><span class="p">,</span> <span class="n">numRows</span> <span class="o">=</span> <span class="mi">3</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="s">&quot;PAHNAPLSIIGYIR&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>例子2</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;PAYPALISHIRING&quot;</span><span class="p">,</span> <span class="n">numRows</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="s">&quot;PINALSIGYAHRPI&quot;</span>
+</span><span class='line'><span class="nl">Explanation</span><span class="p">:</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">P</span>     <span class="n">I</span>    <span class="n">N</span>
+</span><span class='line'><span class="n">A</span>   <span class="n">L</span> <span class="n">S</span>  <span class="n">I</span> <span class="n">G</span>
+</span><span class='line'><span class="n">Y</span> <span class="n">A</span>   <span class="n">H</span> <span class="n">R</span>
+</span><span class='line'><span class="n">P</span>     <span class="n">I</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>问题分析</h2>
+
+<p>我们按列来分析下，没一列的长度都是指定的row大小(除去最后一列)。这表示从这个列的开始到下个列的开始也是相隔了 2row-2 的长度。再从每一列单独来看如果这列的后面还有一列则随着行数的增加排在同行的字符间隔减少2。</p>
+
+<p>以上面例子2中的第一列为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">P</span><span class="err">的后面是</span><span class="n">I</span> <span class="err">中间间隔</span><span class="mi">2</span><span class="n">row</span><span class="o">-</span><span class="mi">2</span><span class="o">=</span><span class="mi">6</span><span class="err">，</span><span class="n">A</span><span class="err">的后面是</span><span class="n">L</span><span class="err">间隔</span><span class="mi">4</span><span class="err">，</span><span class="n">Y</span><span class="err">的后面是</span><span class="n">A</span><span class="err">间隔</span><span class="mi">2</span><span class="err">，</span><span class="n">P</span><span class="err">的后面间隔</span><span class="mi">0</span><span class="err">代表没有。</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>代码实现</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span> <span class="o">*</span> <span class="nf">convert</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numRows</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">sLen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nextPos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nextCol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">colSkip</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">numRows</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sLen</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">sLen</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">colSkip</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">numRows</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">nextPos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">nextCol</span><span class="o">=</span><span class="n">index</span><span class="p">;</span><span class="n">nextPos</span><span class="o">&lt;</span><span class="n">sLen</span><span class="p">;</span><span class="n">nextCol</span><span class="o">=</span><span class="n">colSkip</span><span class="o">*</span><span class="p">(</span><span class="o">++</span><span class="n">col</span><span class="p">)</span><span class="o">+</span><span class="n">index</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">nextPos</span> <span class="o">=</span> <span class="n">nextCol</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="o">+</span><span class="n">colSkip</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">nextCol</span><span class="o">&lt;</span><span class="n">sLen</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">result</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">nextCol</span><span class="p">];</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">nextPos</span><span class="o">&gt;</span><span class="n">nextCol</span><span class="o">&amp;&amp;</span><span class="n">nextPos</span><span class="o">&lt;</span><span class="n">nextCol</span><span class="o">+</span><span class="n">colSkip</span><span class="o">&amp;&amp;</span><span class="n">nextPos</span><span class="o">&lt;</span><span class="n">sLen</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">result</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">nextPos</span><span class="p">];</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>运行结果</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">4</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">88.04</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">ZigZag</span> <span class="n">Conversion</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.8</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">100.00</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">ZigZag</span> <span class="n">Conversion</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>其他思路</h3>
+
+<p>一行用一个字符数组表示，字符数组写入数据的顺序由是否第一行和最后一行来控制。<strong>具体代码见leetcode关于本题的讨论</strong></p>
+
+<h2>后记</h2>
+
+<h3>corner case</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="s">&quot;A&quot;</span> <span class="mi">1</span>
+</span><span class='line'><span class="s">&quot;ABC&quot;</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Longest Palindromic Substring]]></title>
