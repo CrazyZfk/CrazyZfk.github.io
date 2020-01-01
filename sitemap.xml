@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://crazyzfk.github.io/blog/2020/01/01/string-to-integer-atoi/</loc>
+<lastmod>2020-01-01T17:31:34+08:00</lastmod>
+</url>
+<url>
 <loc>http://crazyzfk.github.io/blog/2019/12/21/zigzag-conversion/</loc>
 <lastmod>2019-12-21T12:08:10+08:00</lastmod>
 </url>
