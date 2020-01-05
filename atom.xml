@@ -4,7 +4,7 @@
   <title><![CDATA[crazyzfk's blog]]></title>
   <link href="http://crazyzfk.github.io/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2020-01-01T17:33:44+08:00</updated>
+  <updated>2020-01-05T11:36:58+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Container With Most Water]]></title>
+    <link href="http://crazyzfk.github.io/blog/2020/01/05/container-with-most-water/"/>
+    <updated>2020-01-05T11:35:06+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2020/01/05/container-with-most-water</id>
+    <content type="html"><![CDATA[<h2>问题描述</h2>
+
+<p>假设有n个非负的整数a1,a2,&hellip;an，在二维坐标系中分别代表(1,a1),(2,a2)&hellip;(n,an)。分别以这些点为起点向x轴作垂线，以这些垂线为一遍x轴为一边找到最大的面积。</p>
+
+<blockquote><p>n 至少为2</p></blockquote>
+
+<p>举例</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Input: [1,8,6,2,5,4,8,3,7]
+</span><span class='line'>Output: 49</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从数组的第2个数到最后一个数可以组成一个面积为7*7的矩型。</p>
+
+<p>数组第2个数到第7个数组成的面积为8*6，小于49。</p>
+
+<h2>问题分析</h2>
+
+<p>比较简单的思路就是穷举，找到所有的组合的面积返回最大的即可，这样太挫了，不用这个思路了。</p>
+
+<p><strong>以下是看了答案后的思考</strong></p>
+
+<p>面积等于长乘以宽，尽可能的长和尽可能的宽能够获取到大的面积。长最大为n，宽最大为数组中的最大数。</p>
+
+<p>首先有两个指针，分别指向第一个数和最后一个数，这个时候是最长的，但是面积不是最大的。长度的变化也是依赖数组中的数字大小，这个时候如何进行下一步是关键。根据尽可能长的标准，保留最长的一个边移动较短的一边的指针。计算出每次的面积，最后返回最大的面积。</p>
+
+<p>代码如下</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="nf">maxArea</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">heightSize</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">first</span><span class="p">,</span><span class="o">*</span><span class="n">end</span><span class="p">,</span><span class="n">maxArea</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">realHeight</span><span class="p">,</span><span class="n">tmpArea</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">first</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">end</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">[</span><span class="n">heightSize</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">realHeight</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">)</span><span class="o">&gt;=</span><span class="p">(</span><span class="o">*</span><span class="n">end</span><span class="p">)</span><span class="o">?</span><span class="p">(</span><span class="o">*</span><span class="n">end</span><span class="p">)</span><span class="o">:</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">tmpArea</span> <span class="o">=</span> <span class="n">realHeight</span> <span class="o">*</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">first</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">tmpArea</span><span class="o">&gt;</span><span class="n">maxArea</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">maxArea</span> <span class="o">=</span> <span class="n">tmpArea</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="o">&gt;=*</span><span class="n">end</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">end</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">first</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">maxArea</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行结果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">12</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">94.13</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Container</span> <span class="n">With</span> <span class="n">Most</span> <span class="n">Water</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.8</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">42.86</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Container</span> <span class="n">With</span> <span class="n">Most</span> <span class="n">Water</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[String to Integer (Atoi)]]></title>
