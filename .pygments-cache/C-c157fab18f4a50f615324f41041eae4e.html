@@ -1,0 +1,23 @@
+<div class="highlight"><pre><span class="kt">int</span><span class="o">*</span> <span class="nf">twoSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numsSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">foundflag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">values</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">temp</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">target</span><span class="o">-</span><span class="n">temp</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]){</span>
+                <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+                <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+                <span class="n">foundflag</span><span class="o">=</span><span class="mi">1</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">floudflag</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">values</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>

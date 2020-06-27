@@ -1,0 +1,82 @@
+<div class="highlight"><pre><span class="k">struct</span> <span class="n">Node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">Node</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">void</span> <span class="nf">sort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">list</span><span class="p">,</span><span class="kt">int</span> <span class="n">size</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">tmp</span><span class="p">,</span><span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">size</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;</span><span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]){</span>
+                <span class="n">tmp</span><span class="o">=</span><span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+                <span class="n">list</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">tmp</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span><span class="o">**</span> <span class="nf">threeSum</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numsSize</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">returnSize</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">left</span><span class="p">,</span><span class="n">right</span><span class="p">,</span><span class="n">sum</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">**</span><span class="n">result</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">Node</span> <span class="o">*</span><span class="n">head</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">Node</span> <span class="o">*</span><span class="n">curr</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">Node</span> <span class="o">*</span><span class="n">pre</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="n">numsSize</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">numsSize</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]){</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">left</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">right</span><span class="o">=</span><span class="n">numsSize</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="p">){</span>
+            <span class="n">sum</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">];</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">sum</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+                <span class="p">(</span><span class="o">*</span><span class="n">returnSize</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">head</span><span class="p">){</span>
+                    <span class="n">head</span><span class="o">=</span><span class="p">(</span><span class="k">struct</span> <span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">Node</span><span class="p">));</span>
+                    <span class="n">curr</span><span class="o">=</span><span class="n">head</span><span class="p">;</span>
+                <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                    <span class="n">curr</span><span class="o">=</span><span class="p">(</span><span class="k">struct</span> <span class="n">Node</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">Node</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="n">curr</span><span class="o">-&gt;</span><span class="n">a</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">curr</span><span class="o">-&gt;</span><span class="n">b</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+                <span class="n">curr</span><span class="o">-&gt;</span><span class="n">c</span><span class="o">=</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">];</span>
+                <span class="n">curr</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">pre</span><span class="p">){</span>
+                    <span class="n">pre</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="n">curr</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">pre</span><span class="o">=</span><span class="n">curr</span><span class="p">;</span>
+
+                <span class="k">while</span><span class="p">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">&amp;&amp;</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span><span class="p">]){</span>
+                    <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">while</span><span class="p">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">&amp;&amp;</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">]){</span>
+                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">sum</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span>
+                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">**</span><span class="p">)</span><span class="n">malloc</span><span class="p">((</span><span class="o">*</span><span class="n">returnSize</span><span class="p">)</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">));</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">head</span><span class="p">){</span>
+        <span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">);</span>
+        <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">a</span><span class="p">;</span>
+        <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">b</span><span class="p">;</span>
+        <span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">c</span><span class="p">;</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">value</span><span class="p">;</span>
+        <span class="n">curr</span><span class="o">=</span><span class="n">head</span><span class="p">;</span>
+        <span class="n">head</span><span class="o">=</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">curr</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>

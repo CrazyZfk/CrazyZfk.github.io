@@ -1,0 +1,36 @@
+<div class="highlight"><pre><span class="kd">class</span> <span class="nc">Student</span> <span class="kd">implements</span> <span class="n">Serializable</span><span class="o">{</span>
+	<span class="cm">/**</span>
+<span class="cm">	 * </span>
+<span class="cm">	 */</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1205959179532190345L</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">grade</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">transient</span> <span class="n">String</span> <span class="n">school</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getGrade</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">grade</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setGrade</span><span class="o">(</span><span class="kt">int</span> <span class="n">grade</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">grade</span> <span class="o">=</span> <span class="n">grade</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getSchool</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">school</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSchool</span><span class="o">(</span><span class="n">String</span> <span class="n">school</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">school</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+<span class="o">}</span>
+</pre></div>

@@ -1,0 +1,89 @@
+<div class="highlight"><pre><span class="kt">char</span><span class="o">*</span> <span class="n">MAX_INT_WITHOUTSIGN</span> <span class="o">=</span> <span class="s">&quot;2147483647&quot;</span><span class="p">;</span>
+<span class="kt">char</span><span class="o">*</span> <span class="n">MIN_INT_WITHOUTSIGN</span> <span class="o">=</span> <span class="s">&quot;2147483648&quot;</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">MAX_LENGTH</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">myAtoi</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">realBeg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">beg</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">end</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">numbers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">result</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">charToNumber</span><span class="p">,</span><span class="n">tenTimePos</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">point</span><span class="p">;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39; &#39;</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&gt;=</span><span class="sc">&#39;0&#39;</span><span class="o">&amp;&amp;</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&lt;=</span><span class="sc">&#39;9&#39;</span><span class="o">&amp;&amp;</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+            <span class="n">beg</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">((</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+            <span class="n">beg</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&lt;</span><span class="sc">&#39;0&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&gt;</span><span class="sc">&#39;9&#39;</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="p">(</span><span class="n">beg</span><span class="o">==</span><span class="n">end</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)){</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="p">){</span>
+        <span class="n">realBeg</span> <span class="o">=</span> <span class="n">beg</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+        <span class="n">realBeg</span> <span class="o">=</span> <span class="n">beg</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">realBeg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;0&#39;</span><span class="p">){</span>
+        <span class="n">realBeg</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">realBeg</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="o">&gt;</span><span class="n">MAX_LENGTH</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span> <span class="mi">2147483647</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">numbers</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">realBeg</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;=</span><span class="n">end</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">point</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">point</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="o">&gt;=</span><span class="n">MAX_LENGTH</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">point</span><span class="p">,</span><span class="n">MIN_INT_WITHOUTSIGN</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">){</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">MAX_INT_WITHOUTSIGN</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="mi">2147483647</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">numbers</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">--</span><span class="p">,</span><span class="n">pos</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">charToNumber</span><span class="o">=</span><span class="n">point</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">tenTimePos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">tenTimePos</span><span class="o">&lt;</span><span class="n">pos</span><span class="p">;</span><span class="n">tenTimePos</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">charToNumber</span><span class="o">*=</span><span class="mi">10</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">result</span><span class="o">+=</span><span class="n">charToNumber</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">-</span><span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>

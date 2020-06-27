@@ -1,0 +1,36 @@
+<div class="highlight"><pre><span class="kt">int</span> <span class="nf">findPalindromicString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">){</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="o">*</span><span class="n">ep</span><span class="o">=</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">tmpSp</span><span class="p">,</span><span class="o">*</span><span class="n">tmpEp</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">isPalindromic</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">tmpResult</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">ep</span><span class="p">){</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">tmpSp</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span><span class="n">tmpEp</span><span class="o">=</span><span class="n">ep</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">&lt;</span><span class="n">tmpEp</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">++</span><span class="p">,</span><span class="n">tmpEp</span><span class="o">--</span><span class="p">){</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">tmpSp</span> <span class="o">!=</span> <span class="o">*</span><span class="n">tmpEp</span><span class="p">){</span>
+                    <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">isPalindromic</span><span class="p">){</span>
+                <span class="k">for</span><span class="p">(</span><span class="n">tmpSp</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">&lt;=</span><span class="n">ep</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">++</span><span class="p">){</span>
+                    <span class="n">tmpResult</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">tmpSp</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">tmpResult</span> <span class="o">&gt;</span> <span class="n">result</span><span class="p">){</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">tmpResult</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">ep</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">ep</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">tmpResult</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>    
+<span class="p">}</span>
+</pre></div>
