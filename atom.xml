@@ -4,7 +4,7 @@
   <title><![CDATA[crazyzfk's blog]]></title>
   <link href="http://crazyzfk.github.io/atom.xml" rel="self"/>
   <link href="http://crazyzfk.github.io/"/>
-  <updated>2019-03-23T15:44:21+08:00</updated>
+  <updated>2020-06-26T20:40:33+08:00</updated>
   <id>http://crazyzfk.github.io/</id>
   <author>
     <name><![CDATA[zfk]]></name>
@@ -14,11 +14,1232 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Container With Most Water]]></title>
+    <link href="http://crazyzfk.github.io/blog/2020/01/05/container-with-most-water/"/>
+    <updated>2020-01-05T11:35:06+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2020/01/05/container-with-most-water</id>
+    <content type="html"><![CDATA[<h2>问题描述</h2>
+
+<p>假设有n个非负的整数a1,a2,&hellip;an，在二维坐标系中分别代表(1,a1),(2,a2)&hellip;(n,an)。分别以这些点为起点向x轴作垂线，以这些垂线为一遍x轴为一边找到最大的面积。</p>
+
+<blockquote><p>n 至少为2</p></blockquote>
+
+<p>举例</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Input: [1,8,6,2,5,4,8,3,7]
+</span><span class='line'>Output: 49</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从数组的第2个数到最后一个数可以组成一个面积为7*7的矩型。</p>
+
+<p>数组第2个数到第7个数组成的面积为8*6，小于49。</p>
+
+<h2>问题分析</h2>
+
+<p>比较简单的思路就是穷举，找到所有的组合的面积返回最大的即可，这样太挫了，不用这个思路了。</p>
+
+<p><strong>以下是看了答案后的思考</strong></p>
+
+<p>面积等于长乘以宽，尽可能的长和尽可能的宽能够获取到大的面积。长最大为n，宽最大为数组中的最大数。</p>
+
+<p>首先有两个指针，分别指向第一个数和最后一个数，这个时候是最长的，但是面积不是最大的。长度的变化也是依赖数组中的数字大小，这个时候如何进行下一步是关键。根据尽可能长的标准，保留最长的一个边移动较短的一边的指针。计算出每次的面积，最后返回最大的面积。</p>
+
+<p>代码如下</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="nf">maxArea</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">height</span><span class="p">,</span> <span class="kt">int</span> <span class="n">heightSize</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">first</span><span class="p">,</span><span class="o">*</span><span class="n">end</span><span class="p">,</span><span class="n">maxArea</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">realHeight</span><span class="p">,</span><span class="n">tmpArea</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">first</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">end</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">[</span><span class="n">heightSize</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;=</span> <span class="n">end</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">realHeight</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">)</span><span class="o">&gt;=</span><span class="p">(</span><span class="o">*</span><span class="n">end</span><span class="p">)</span><span class="o">?</span><span class="p">(</span><span class="o">*</span><span class="n">end</span><span class="p">)</span><span class="o">:</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">tmpArea</span> <span class="o">=</span> <span class="n">realHeight</span> <span class="o">*</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">first</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">tmpArea</span><span class="o">&gt;</span><span class="n">maxArea</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">maxArea</span> <span class="o">=</span> <span class="n">tmpArea</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="o">&gt;=*</span><span class="n">end</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">end</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">first</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">maxArea</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行结果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">12</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">94.13</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Container</span> <span class="n">With</span> <span class="n">Most</span> <span class="n">Water</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.8</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">42.86</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Container</span> <span class="n">With</span> <span class="n">Most</span> <span class="n">Water</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[String to Integer (Atoi)]]></title>
+    <link href="http://crazyzfk.github.io/blog/2020/01/01/string-to-integer-atoi/"/>
+    <updated>2020-01-01T17:31:34+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2020/01/01/string-to-integer-atoi</id>
+    <content type="html"><![CDATA[<h2>问题描述</h2>
+
+<p>实现atoi函数将string类型转换为int。</p>
+
+<p>注意</p>
+
+<ol>
+<li>只有' &lsquo;被认为是空字符</li>
+<li>只处理32位整数范围 [-2<sup>31</sup>,2<sup>31</sup>-1],超过这个范围的整数则返回对应的最大值和最小值。</li>
+</ol>
+
+
+<p>举例</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;42&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="mi">42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;   -42&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="o">-</span><span class="mi">42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;4193 with words&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="mi">4193</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;words and 987&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="mi">0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;-91283472332&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="o">-</span><span class="mi">2147483648</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>问题分析</h2>
+
+<p>首先考虑特殊情况</p>
+
+<ol>
+<li>全是空格的字符串</li>
+<li>第一个非空的字符串不是数字也不是+/-符号的字符串</li>
+</ol>
+
+
+<p>将上面两种情况首先排除，上面的情况可以直接返回0。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39; &#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&gt;=</span><span class="sc">&#39;0&#39;</span><span class="o">&amp;&amp;</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&lt;=</span><span class="sc">&#39;9&#39;</span><span class="o">&amp;&amp;</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">beg</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">((</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">beg</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&lt;</span><span class="sc">&#39;0&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&gt;</span><span class="sc">&#39;9&#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="p">(</span><span class="n">beg</span><span class="o">==</span><span class="n">end</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)){</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>剩下的部分就是提取出需要的字符串,根据与最大和最小整数字符串比较来判断是否超过了范围。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">MAX_INT_WITHOUTSIGN</span> <span class="o">=</span> <span class="s">&quot;2147483647&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">MIN_INT_WITHOUTSIGN</span> <span class="o">=</span> <span class="s">&quot;2147483648&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">MAX_LENGTH</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>   <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">realBeg</span> <span class="o">=</span> <span class="n">beg</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">realBeg</span> <span class="o">=</span> <span class="n">beg</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">realBeg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;0&#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">realBeg</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">numbers</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">realBeg</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="o">&gt;</span><span class="n">MAX_LENGTH</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="mi">2147483647</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">numbers</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">realBeg</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;=</span><span class="n">end</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">point</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">point</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="o">&gt;=</span><span class="n">MAX_LENGTH</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">point</span><span class="p">,</span><span class="n">MIN_INT_WITHOUTSIGN</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">MAX_INT_WITHOUTSIGN</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="mi">2147483647</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>剩下的部分就比较简单了，直接按照位数乘以10项加起来就可以了</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">numbers</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">--</span><span class="p">,</span><span class="n">pos</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">charToNumber</span><span class="o">=</span><span class="n">point</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">tenTimePos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">tenTimePos</span><span class="o">&lt;</span><span class="n">pos</span><span class="p">;</span><span class="n">tenTimePos</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">charToNumber</span><span class="o">*=</span><span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span><span class="o">+=</span><span class="n">charToNumber</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">free</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="o">-</span><span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完整的代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">MAX_INT_WITHOUTSIGN</span> <span class="o">=</span> <span class="s">&quot;2147483647&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="n">MIN_INT_WITHOUTSIGN</span> <span class="o">=</span> <span class="s">&quot;2147483648&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">MAX_LENGTH</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">myAtoi</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">realBeg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">beg</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">end</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">numbers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">result</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">charToNumber</span><span class="p">,</span><span class="n">tenTimePos</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">point</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">size</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39; &#39;</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&gt;=</span><span class="sc">&#39;0&#39;</span><span class="o">&amp;&amp;</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&lt;=</span><span class="sc">&#39;9&#39;</span><span class="o">&amp;&amp;</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">beg</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">((</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">beg</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&lt;</span><span class="sc">&#39;0&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">&gt;</span><span class="sc">&#39;9&#39;</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>                <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">end</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">beg</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="p">(</span><span class="n">beg</span><span class="o">==</span><span class="n">end</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="o">||</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">realBeg</span> <span class="o">=</span> <span class="n">beg</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">realBeg</span> <span class="o">=</span> <span class="n">beg</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">realBeg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;0&#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">realBeg</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">numbers</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">realBeg</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="o">&gt;</span><span class="n">MAX_LENGTH</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="mi">2147483647</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">numbers</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">realBeg</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;=</span><span class="n">end</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">point</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">str</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">point</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">numbers</span><span class="o">&gt;=</span><span class="n">MAX_LENGTH</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">point</span><span class="p">,</span><span class="n">MIN_INT_WITHOUTSIGN</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">MAX_INT_WITHOUTSIGN</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">return</span> <span class="mi">2147483647</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">numbers</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">--</span><span class="p">,</span><span class="n">pos</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">charToNumber</span><span class="o">=</span><span class="n">point</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">-</span><span class="sc">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">tenTimePos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">tenTimePos</span><span class="o">&lt;</span><span class="n">pos</span><span class="p">;</span><span class="n">tenTimePos</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">charToNumber</span><span class="o">*=</span><span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">result</span><span class="o">+=</span><span class="n">charToNumber</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">beg</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="o">-</span><span class="n">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行结果(有点懵，同样的代码得到不同的结果)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">4</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">66.31</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">String</span> <span class="n">to</span> <span class="n">Integer</span> <span class="p">(</span><span class="n">atoi</span><span class="p">).</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">6.9</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">71.43</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">String</span> <span class="n">to</span> <span class="n">Integer</span> <span class="p">(</span><span class="n">atoi</span><span class="p">).</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">0</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">100.00</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">String</span> <span class="n">to</span> <span class="n">Integer</span> <span class="p">(</span><span class="n">atoi</span><span class="p">).</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.1</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">14.29</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">String</span> <span class="n">to</span> <span class="n">Integer</span> <span class="p">(</span><span class="n">atoi</span><span class="p">).</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ZigZag Conversion]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/12/21/zigzag-conversion/"/>
+    <updated>2019-12-21T12:08:10+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/12/21/zigzag-conversion</id>
+    <content type="html"><![CDATA[<h2>问题描述</h2>
+
+<p>在给定行数的情况下字符串 &ldquo;PAYPALISHIRING&rdquo; 可以被写成如下的之字型：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">P</span>   <span class="n">A</span>   <span class="n">H</span>   <span class="n">N</span>
+</span><span class='line'><span class="n">A</span> <span class="n">P</span> <span class="n">L</span> <span class="n">S</span> <span class="n">I</span> <span class="n">I</span> <span class="n">G</span>
+</span><span class='line'><span class="n">Y</span>   <span class="n">I</span>   <span class="n">R</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>按照行读取的字符串为："PAHNAPLSIIGYIR"</p>
+
+<p>写代码指定行数完成上面的转换</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">string</span> <span class="nf">convert</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numRows</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>例子1</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;PAYPALISHIRING&quot;</span><span class="p">,</span> <span class="n">numRows</span> <span class="o">=</span> <span class="mi">3</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="s">&quot;PAHNAPLSIIGYIR&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>例子2</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&quot;PAYPALISHIRING&quot;</span><span class="p">,</span> <span class="n">numRows</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="s">&quot;PINALSIGYAHRPI&quot;</span>
+</span><span class='line'><span class="nl">Explanation</span><span class="p">:</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">P</span>     <span class="n">I</span>    <span class="n">N</span>
+</span><span class='line'><span class="n">A</span>   <span class="n">L</span> <span class="n">S</span>  <span class="n">I</span> <span class="n">G</span>
+</span><span class='line'><span class="n">Y</span> <span class="n">A</span>   <span class="n">H</span> <span class="n">R</span>
+</span><span class='line'><span class="n">P</span>     <span class="n">I</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>问题分析</h2>
+
+<p>我们按列来分析下，没一列的长度都是指定的row大小(除去最后一列)。这表示从这个列的开始到下个列的开始也是相隔了 2row-2 的长度。再从每一列单独来看如果这列的后面还有一列则随着行数的增加排在同行的字符间隔减少2。</p>
+
+<p>以上面例子2中的第一列为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">P</span><span class="err">的后面是</span><span class="n">I</span> <span class="err">中间间隔</span><span class="mi">2</span><span class="n">row</span><span class="o">-</span><span class="mi">2</span><span class="o">=</span><span class="mi">6</span><span class="err">，</span><span class="n">A</span><span class="err">的后面是</span><span class="n">L</span><span class="err">间隔</span><span class="mi">4</span><span class="err">，</span><span class="n">Y</span><span class="err">的后面是</span><span class="n">A</span><span class="err">间隔</span><span class="mi">2</span><span class="err">，</span><span class="n">P</span><span class="err">的后面间隔</span><span class="mi">0</span><span class="err">代表没有。</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>代码实现</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span> <span class="o">*</span> <span class="nf">convert</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numRows</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">sLen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nextPos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">nextCol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">colSkip</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">numRows</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sLen</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">sLen</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">colSkip</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">numRows</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">nextPos</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">nextCol</span><span class="o">=</span><span class="n">index</span><span class="p">;</span><span class="n">nextPos</span><span class="o">&lt;</span><span class="n">sLen</span><span class="p">;</span><span class="n">nextCol</span><span class="o">=</span><span class="n">colSkip</span><span class="o">*</span><span class="p">(</span><span class="o">++</span><span class="n">col</span><span class="p">)</span><span class="o">+</span><span class="n">index</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">nextPos</span> <span class="o">=</span> <span class="n">nextCol</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="o">+</span><span class="n">colSkip</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">nextCol</span><span class="o">&lt;</span><span class="n">sLen</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">result</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">nextCol</span><span class="p">];</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">nextPos</span><span class="o">&gt;</span><span class="n">nextCol</span><span class="o">&amp;&amp;</span><span class="n">nextPos</span><span class="o">&lt;</span><span class="n">nextCol</span><span class="o">+</span><span class="n">colSkip</span><span class="o">&amp;&amp;</span><span class="n">nextPos</span><span class="o">&lt;</span><span class="n">sLen</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">result</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">nextPos</span><span class="p">];</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>运行结果</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">4</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">88.04</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">ZigZag</span> <span class="n">Conversion</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.8</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">100.00</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">ZigZag</span> <span class="n">Conversion</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>其他思路</h3>
+
+<p>一行用一个字符数组表示，字符数组写入数据的顺序由是否第一行和最后一行来控制。<strong>具体代码见leetcode关于本题的讨论</strong></p>
+
+<h2>后记</h2>
+
+<h3>corner case</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="s">&quot;A&quot;</span> <span class="mi">1</span>
+</span><span class='line'><span class="s">&quot;ABC&quot;</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Longest Palindromic Substring]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/12/15/longest-palindromic-substring/"/>
+    <updated>2019-12-15T12:50:37+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/12/15/longest-palindromic-substring</id>
+    <content type="html"><![CDATA[<h2>问题描述</h2>
+
+<p>找出字符串s中最长的回文子串，假设s最长为1000.</p>
+
+<p>例子1：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;babad&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="s">&quot;bab&quot;</span>
+</span><span class='line'><span class="nl">Note</span><span class="p">:</span> <span class="s">&quot;aba&quot;</span> <span class="n">is</span> <span class="n">also</span> <span class="n">a</span> <span class="n">valid</span> <span class="n">answer</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>例子2:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Input</span><span class="p">:</span> <span class="s">&quot;cbbd&quot;</span>
+</span><span class='line'><span class="nl">Output</span><span class="p">:</span> <span class="s">&quot;bb&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>问题分析</h2>
+
+<ol>
+<li>首先需要找到字符串中的所有回文子串。</li>
+<li>选择上一步中所有回文子串中最长的。</li>
+</ol>
+
+
+<h3>查找回文子串</h3>
+
+<p>回文字符串的最大特点是整个字符串是对称的结构，可以使用两个指针来分别代表子串的开始和结束。然后在确定子串是否是对称的，由此来判断字符串是否是回文的。</p>
+
+<p>下面的代码是打印所有的回文子串并返回最长子串的长度：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="nf">findPalindromicString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="o">*</span><span class="n">ep</span><span class="o">=</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">tmpSp</span><span class="p">,</span><span class="o">*</span><span class="n">tmpEp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">bool</span> <span class="n">isPalindromic</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">tmpResult</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">ep</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">tmpSp</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span><span class="n">tmpEp</span><span class="o">=</span><span class="n">ep</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">&lt;</span><span class="n">tmpEp</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">++</span><span class="p">,</span><span class="n">tmpEp</span><span class="o">--</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">tmpSp</span> <span class="o">!=</span> <span class="o">*</span><span class="n">tmpEp</span><span class="p">){</span>
+</span><span class='line'>                    <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">isPalindromic</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">for</span><span class="p">(</span><span class="n">tmpSp</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">&lt;=</span><span class="n">ep</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                    <span class="n">tmpResult</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">tmpSp</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">tmpResult</span> <span class="o">&gt;</span> <span class="n">result</span><span class="p">){</span>
+</span><span class='line'>                    <span class="n">result</span> <span class="o">=</span> <span class="n">tmpResult</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">ep</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">ep</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">tmpResult</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>查找最长回文子串</h3>
+
+<p>有了上面的例子返回最长子串就比较简单了，只要有个char *保存最长的子串然后返回就可以了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span><span class="o">*</span> <span class="nf">findPalindromicString</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="o">*</span><span class="n">ep</span><span class="o">=</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">tmpSp</span><span class="p">,</span><span class="o">*</span><span class="n">tmpEp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">startPoint</span><span class="o">=</span><span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">bool</span> <span class="n">isPalindromic</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">tmpLength</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">)){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">ep</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">tmpSp</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span><span class="n">tmpEp</span><span class="o">=</span><span class="n">ep</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">&lt;</span><span class="n">tmpEp</span><span class="p">;</span><span class="n">tmpSp</span><span class="o">++</span><span class="p">,</span><span class="n">tmpEp</span><span class="o">--</span><span class="p">){</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">tmpSp</span> <span class="o">!=</span> <span class="o">*</span><span class="n">tmpEp</span><span class="p">){</span>
+</span><span class='line'>                    <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">isPalindromic</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">tmpLength</span> <span class="o">=</span> <span class="n">ep</span> <span class="o">-</span> <span class="n">sp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">tmpLength</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">){</span>
+</span><span class='line'>                    <span class="n">max</span> <span class="o">=</span> <span class="n">tmpLength</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">startPoint</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">ep</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">ep</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">isPalindromic</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">tmpLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">max</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">max</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">=*</span><span class="p">(</span><span class="n">startPoint</span><span class="o">++</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span><span class="p">[</span><span class="n">max</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>运行结果</h2>
+
+<p>下面为在leetcode的运行结果</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">1644</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">5.05</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Palindromic</span> <span class="n">Substring</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.3</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">18.18</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Palindromic</span> <span class="n">Substring</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>效果很差</strong></p>
+
+<h2>代码优化</h2>
+
+<h3>时间复杂度优化</h3>
+
+<p>从上面的代码中可以看到查找回文字符串的时间复杂度至少为O(n<sup>2</sup>),这个时间主要花在了字符串的遍历上面。一共有这么多的遍历：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">n</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="p">...</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了找到所有可能的回文子串，遍历了所有的子串，通过检查子串来确定是否是回文的。</p>
+
+<p>思考：是否可以不检查所有的字符串就能找到回文字符串？</p>
+
+<p>回文字符串是对称的，对称的一个重要特点是从中间开始两边的字符串相等。如果按照这个思路来解决的话我们就可以很快的判断一个子串是不是回文的，而且不用检查所有的字符串。</p>
+
+<p>举个例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="err">查找</span><span class="n">abcbd</span><span class="err">字符串的最长回文</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>按照以前的思路我们需要检查的子串如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">ab</span>
+</span><span class='line'><span class="n">abc</span>
+</span><span class='line'><span class="n">abcb</span>
+</span><span class='line'><span class="n">abcbd</span>
+</span><span class='line'><span class="n">bc</span>
+</span><span class='line'><span class="n">bcb</span> <span class="c1">//回文子串</span>
+</span><span class='line'><span class="n">bcbd</span>
+</span><span class='line'><span class="n">cb</span>
+</span><span class='line'><span class="n">cbd</span>
+</span><span class='line'><span class="n">bd</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果按照新的思路来考虑需要检查下面的子串：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">abc</span>
+</span><span class='line'><span class="n">bcb</span><span class="c1">//回文子串</span>
+</span><span class='line'><span class="n">cbd</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从两个思路需要检查的子串数量可以看出优化后方法的时间复杂度会下降很多。</p>
+
+<p>新思路代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span> <span class="o">*</span> <span class="nf">findPalindromicStringOpti1</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span><span class="o">*</span><span class="n">lower</span><span class="p">,</span><span class="o">*</span><span class="n">upper</span><span class="p">,</span><span class="o">*</span><span class="n">startPoint</span><span class="o">=</span><span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">maxLength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">tmpLength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">bool</span> <span class="n">odd</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">||!</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!*</span><span class="p">(</span><span class="n">sp</span><span class="o">+</span><span class="mi">2</span><span class="p">)){</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span><span class="o">==*</span><span class="p">(</span><span class="n">sp</span><span class="o">+</span><span class="mi">1</span><span class="p">)){</span>
+</span><span class='line'>            <span class="n">maxLength</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">startPoint</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="n">sp</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="o">*</span><span class="p">(</span><span class="n">sp</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span><span class="n">sp</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">lower</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">upper</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(;</span><span class="n">lower</span><span class="o">&gt;=</span><span class="n">s</span><span class="o">&amp;&amp;*</span><span class="n">upper</span><span class="o">&amp;&amp;*</span><span class="n">lower</span><span class="o">==*</span><span class="n">upper</span><span class="p">;</span><span class="n">lower</span><span class="o">--</span><span class="p">,</span><span class="n">upper</span><span class="o">++</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">tmpLength</span> <span class="o">=</span> <span class="n">upper</span> <span class="o">-</span> <span class="n">lower</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">tmpLength</span> <span class="o">&gt;</span> <span class="n">maxLength</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">maxLength</span> <span class="o">=</span> <span class="n">tmpLength</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">startPoint</span> <span class="o">=</span> <span class="o">++</span><span class="n">lower</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">lower</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">upper</span> <span class="o">=</span> <span class="n">sp</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">sp</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==*</span><span class="n">sp</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">lower</span> <span class="o">=</span> <span class="n">sp</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">upper</span> <span class="o">=</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">sp</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">==*</span><span class="n">sp</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">upper</span> <span class="o">=</span> <span class="n">sp</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">lower</span> <span class="o">=</span> <span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(;</span><span class="n">lower</span><span class="o">&gt;=</span><span class="n">s</span><span class="o">&amp;&amp;*</span><span class="n">upper</span><span class="o">&amp;&amp;*</span><span class="n">lower</span><span class="o">==*</span><span class="n">upper</span><span class="p">;</span><span class="n">lower</span><span class="o">--</span><span class="p">,</span><span class="n">upper</span><span class="o">++</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">tmpLength</span> <span class="o">=</span> <span class="n">upper</span> <span class="o">-</span> <span class="n">lower</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">tmpLength</span> <span class="o">&gt;</span> <span class="n">maxLength</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">maxLength</span> <span class="o">=</span> <span class="n">tmpLength</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">startPoint</span> <span class="o">=</span> <span class="o">++</span><span class="n">lower</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">maxLength</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">maxLength</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">=*</span><span class="p">(</span><span class="n">startPoint</span><span class="o">++</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span><span class="p">[</span><span class="n">maxLength</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>优化后的运行结果</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">12</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">86.53</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Palindromic</span> <span class="n">Substring</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.1</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">90.91</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Palindromic</span> <span class="n">Substring</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>优化后无论是时间还是内存都有了很大的提升</strong></p>
+
+<p>有上可以看出来时间和空间复杂度在换个思路解题后都有了很大的提升。时间和空间的矛盾只有在其中一方已经优化到很好的时候才会体现。</p>
+
+<h3>空间复杂度优化</h3>
+
+<p>同上</p>
+
+<h3>别人的思路</h3>
+
+<h4>动态规划</h4>
+
+<p>字符串的长度为N</p>
+
+<p>i，j均小于N</p>
+
+<p>P(i,j)为下标从i到j的子串</p>
+
+<p>如果P(i,j)为回文子串，则P(i+1,j-1)也是回文的。</p>
+
+<p>反向可以得出如果一个子串是回文的那么它的子串也一定是回文的，即：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">P</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">S</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>实现代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">char</span> <span class="o">*</span> <span class="nf">findPalindromicStringOptiDp</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">){</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">sLength</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">**</span><span class="n">store</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">maxLength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">startPoint</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="o">*</span><span class="n">result</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">||!</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">store</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">**</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">*</span><span class="n">sLength</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">sLength</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">store</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">sLength</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">sLength</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">store</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">sLength</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">i</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">store</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">?</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>                <span class="n">store</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span> <span class="p">(</span><span class="n">store</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">?</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">store</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="n">maxLength</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">startPoint</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">maxLength</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">maxLength</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">index</span><span class="o">&lt;</span><span class="n">maxLength</span><span class="p">;</span><span class="n">index</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">=*</span><span class="p">(</span><span class="n">startPoint</span><span class="o">++</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">result</span><span class="p">[</span><span class="n">maxLength</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">store</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行结果如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">224</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">13.32</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Palindromic</span> <span class="n">Substring</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">183.1</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">9.09</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Palindromic</span> <span class="n">Substring</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由运行结果可以看到，代码使用了大量的空间运行来保存所有子串是否是回文的状态(此处可以优化，比如使用位图来表示)。运行时间也要比简单粗暴检索字符串的方式短很多。</p>
+
+<h2>后记</h2>
+
+<h3>需要考虑的corner case</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="s">&quot;&quot;</span>
+</span><span class='line'><span class="s">&quot;a&quot;</span>
+</span><span class='line'><span class="s">&quot;bbb&quot;</span>
+</span><span class='line'><span class="s">&quot;bb&quot;</span>
+</span><span class='line'><span class="s">&quot;ccb&quot;</span>
+</span><span class='line'><span class="s">&quot;ac&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Add Two Numbers]]></title>
-    <link href="http://crazyzfk.github.io/blog/2019/03/23/Add-Two-Numbers/"/>
-    <updated>2019-03-23T15:35:00+08:00</updated>
-    <id>http://crazyzfk.github.io/blog/2019/03/23/Add-Two-Numbers</id>
-    <content type="html"><![CDATA[<h3>我的解法</h3>
+    <link href="http://crazyzfk.github.io/blog/2019/04/08/add-two-numbers/"/>
+    <updated>2019-04-08T22:43:39+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/04/08/add-two-numbers</id>
+    <content type="html"><![CDATA[<h3>我的代码</h3>
+
+<h4>代码一</h4>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -143,12 +1364,97 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h4>运行结果</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">32</span> <span class="n">ms</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">17.9</span> <span class="n">MB</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Longest Substring Without Repeating Characters]]></title>
+    <link href="http://crazyzfk.github.io/blog/2019/04/03/Longest-Substring-Without-Repeating-Characters/"/>
+    <updated>2019-04-03T20:00:00+08:00</updated>
+    <id>http://crazyzfk.github.io/blog/2019/04/03/Longest-Substring-Without-Repeating-Characters</id>
+    <content type="html"><![CDATA[<h3>我的代码</h3>
+
+<h4>代码一</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">len</span><span class="p">,</span><span class="n">max</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">sp</span><span class="o">=</span><span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">max</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">i</span><span class="o">=*</span><span class="n">sp</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">len</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">sp</span><span class="o">-=</span><span class="n">len</span><span class="o">-</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="o">&gt;</span><span class="n">max</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">max</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">128</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="o">&gt;</span><span class="n">max</span><span class="p">){</span>
+</span><span class='line'>        <span class="n">max</span><span class="o">=</span><span class="n">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <h3>运行结果</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Runtime: <span class="m">32</span> ms, faster than 47.09% of C online submissions <span class="k">for</span> Add Two Numbers.
-</span><span class='line'>Memory Usage: 17.9 MB, less than 25.00% of C online submissions <span class="k">for</span> Add Two Numbers.
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">28</span> <span class="n">ms</span><span class="p">,</span> <span class="n">faster</span> <span class="n">than</span> <span class="mf">38.82</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Substring</span> <span class="n">Without</span> <span class="n">Repeating</span> <span class="n">Characters</span><span class="p">.</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">7.1</span> <span class="n">MB</span><span class="p">,</span> <span class="n">less</span> <span class="n">than</span> <span class="mf">100.00</span><span class="o">%</span> <span class="n">of</span> <span class="n">C</span> <span class="n">online</span> <span class="n">submissions</span> <span class="k">for</span> <span class="n">Longest</span> <span class="n">Substring</span> <span class="n">Without</span> <span class="n">Repeating</span> <span class="n">Characters</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -286,7 +1592,9 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 
 <p>没有把握好细节部分的处理</p>
 
-<h3>threesum 1</h3>
+<h3>threesum</h3>
+
+<h4>代码一</h4>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -435,9 +1743,7 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 
 <p>Time Limit Exceeded</p>
 
-<h4>threesum 2</h4>
-
-<blockquote><p>使用双指针解决复杂度高的问题，使用链表解决内存限制。</p></blockquote>
+<h4>代码二</h4>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -519,7 +1825,8 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 <span class='line-number'>78</span>
 <span class='line-number'>79</span>
 <span class='line-number'>80</span>
-</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="k">struct</span> <span class="n">Node</span><span class="p">{</span>
+<span class='line-number'>81</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">struct</span> <span class="n">Node</span><span class="p">{</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
@@ -576,8 +1883,9 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 </span><span class='line'>                <span class="k">while</span><span class="p">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">&amp;&amp;</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="o">==</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="mi">1</span><span class="p">]){</span>
 </span><span class='line'>                    <span class="n">right</span><span class="o">--</span><span class="p">;</span>
 </span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">sum</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">sum</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span>
 </span><span class='line'>                <span class="n">left</span><span class="o">++</span><span class="p">;</span>
 </span><span class='line'>            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
 </span><span class='line'>                <span class="n">right</span><span class="o">--</span><span class="p">;</span>
@@ -602,15 +1910,15 @@ Memory Usage: 7.6 MB, less than 65.55% of C online submissions for Two Sum.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>测试结果</h4>
+<h4>运行结果</h4>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Details
-</span><span class='line'>Runtime: <span class="m">168</span> ms, faster than 31.01% of C online submissions <span class="k">for</span> 3Sum.
-</span><span class='line'>Memory Usage: 24.7 MB, less than 87.50% of C online submissions <span class="k">for</span> 3Sum.
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="nl">Runtime</span><span class="p">:</span> <span class="mi">168</span> <span class="n">ms</span>
+</span><span class='line'><span class="n">Memory</span> <span class="nl">Usage</span><span class="p">:</span> <span class="mf">24.5</span> <span class="n">MB</span>
 </span></code></pre></td></tr></table></div></figure>
+
+
 
 ]]></content>
   </entry>

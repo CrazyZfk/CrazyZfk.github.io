@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Hashcode in Java - crazyzfk's blog</title>
+  <title>crazyzfk's blog</title>
   <meta name="author" content="zfk">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://crazyzfk.github.io/blog/2017/04/08/hashcode-in-java/">
+  <link rel="canonical" href="http://crazyzfk.github.io/posts/2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="crazyzfk's blog" type="application/atom+xml">
@@ -64,12 +64,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Hashcode in Java</h1>
+      <h1 class="entry-title"><a href="/blog/2017/04/08/hashcode-in-java/">Hashcode in Java</a></h1>
     
     
       <p class="meta">
@@ -85,7 +88,7 @@
   </header>
 
 
-<div class="entry-content"><h2>前言</h2>
+  <div class="entry-content"><h2>前言</h2>
 
 <p>最近在知乎上看到一个关于hashcode的问答（<a href="https://www.zhihu.com/question/57356225/answer/152881868">问答地址</a>），让我了解了java对于hashcode的处理并没有我想的那么简单。以前一直以为对象hashcode计算的结果是指向对象的引用，如果是这种情况那么至少有下面两种情况不满足：</p>
 
@@ -160,52 +163,20 @@ openJDK8使用第四种方式。<br/>
 
 <p>由代码可以看出类的hashcode只会被计算一次，一旦计算好了就不会再有变动。</p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
+  
   
 
-<span class="byline author vcard">Posted by <span class="fn">zfk</span></span>
 
-      
-
-
-
-
-<time class='entry-date' datetime='2017-04-08T10:45:10+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:45 am</span></time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/java/'>java</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://crazyzfk.github.io/blog/2017/04/08/hashcode-in-java/" data-via="crazyzfk" data-counturl="http://crazyzfk.github.io/blog/2017/04/08/hashcode-in-java/" >Tweet</a>
-  
-  
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-      
-        <a class="basic-alignment right" href="/blog/2017/04/16/serialization-in-java/" title="Next Post: serialization in java">serialization in java &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
+    <a class="next" href="/index.html">Newer &rarr;</a>
+    
+  </div>
 </div>
-
 <aside class="sidebar">
   
     <section>
@@ -249,7 +220,6 @@ openJDK8使用第四种方式。<br/>
 
   
 </aside>
-
 
     </div>
   </div>
