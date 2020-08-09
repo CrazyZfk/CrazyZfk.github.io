@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: 
-
-Sitemap: http://crazyzfk.github.io/sitemap.xml 
